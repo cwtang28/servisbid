@@ -37,29 +37,23 @@
         };
 
         firebase.initializeApp(config);
-        
+
         function register(){
-            createUser(function(){linkUser()});
-        }
+            firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).then(function(){
+                    var user = firebase.auth().currentUser;
 
-        function linkUser(){
-            var user = firebase.auth().currentUser;
-            firebase.auth().logout();
-            if (user) {
-                user.updateProfile({
-                  username: document.getElementById("username").value,
-                  birthday: document.getElementById("age").value
-                }).then(function() {
-                    window.location = document.getElementById('link').href;
-                }, function(error) {
-                    console.log(error.message);
-                    document.getElementById("error").innerHTML = error.message;
-                });
-            }
-        }
-
-        function createUser(callback){
-            firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
+                    if (user) {
+                        user.updateProfile({
+                          username: document.getElementById("username").value,
+                          birthday: document.getElementById("age").value
+                        }).then(function() {
+                            window.location = document.getElementById('link').href;
+                        }, function(error) {
+                            console.log(error.message);
+                            document.getElementById("error").innerHTML = error.message;
+                        });
+                    }
+            }).catch(function(error) {
                 console.log(error.code)
                 console.log(error.message);
                 document.getElementById("error").innerHTML = error.message;

@@ -21,7 +21,13 @@ app.get('/login', function (req, res) {
 	res.render('login.html');
 });
 
+app.get('/createProject', function(req, res){
+	res.render('create.html');
+})
 
+app.get('/profile', function(req, res){
+	res.render('profile.html');
+})
 
 
 app.listen(8000)
