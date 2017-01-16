@@ -11,7 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-database.js"></script>
 </head>
 
 <body id="page-top">
@@ -20,13 +19,13 @@
         <input type="text" class="register-input" id="username" placeholder="User Name"><br>
         <input type="password" class="register-input" id="password" placeholder="min 6 characters"><br>
         <input type="email" class="register-input" id="email"placeholder="Email address"><br>
-        <input type="date" class="register-input" id="birthday" placeholder="birthday"><br>
+        <input type="number" class="register-input" id="age" placeholder="age"><br>
 
         <p id="error"></p>
         <button type="button" onclick="register()">Create Account</button>
         <p style = "margin-top: 20px;">Already have an account? Sign in <a href = "/login">here!</a></p>
     </form>
-    <a href="/profile" id="link"> </a>
+    <a href="/profile" id="link" style="display:none"> </a>
 
     <script>
         var config = {
@@ -38,30 +37,32 @@
         };
 
         firebase.initializeApp(config);
-
+        
         function register(){
+            createUser(function(){linkUser()});
+        }
+
+        function linkUser(){
+            var user = firebase.auth().currentUser;
+            firebase.auth().logout();
+            if (user) {
+                user.updateProfile({
+                  username: document.getElementById("username").value,
+                  birthday: document.getElementById("age").value
+                }).then(function() {
+                    window.location = document.getElementById('link').href;
+                }, function(error) {
+                    console.log(error.message);
+                    document.getElementById("error").innerHTML = error.message;
+                });
+            }
+        }
+
+        function createUser(callback){
             firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).catch(function(error) {
                 console.log(error.code)
                 console.log(error.message);
                 document.getElementById("error").innerHTML = error.message;
-                var user = firebase.auth().currentUser;
-
-                if (user) {
-                    console.log("hello");
-                    user.updateProfile({
-                      displayName: "Jane Q. User",
-                      photoURL: "https://example.com/jane-q-user/profile.jpg"
-                    }).then(function() {
-                        
-                        window.location = document.getElementById('link').href;
-
-                    }, function(error) {
-                        console.log(error.message);
-                        document.getElementById("error").innerHTML = error.message;
-                    });
-                } else {
-
-                }
             });
         }
     </script>
