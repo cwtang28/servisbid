@@ -65,17 +65,18 @@
 
 
 
-        var array = new Array();
+        // var array = new Array();
 
-        firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
-            console.log(snapshot.val())
-            if(snapshot.val() != null){
-                array = snapshot.val()  
-            }
-        });
+        // firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
+        //     console.log(snapshot.val())
+        //     if(snapshot.val() != null){
+        //         array = snapshot.val()  
+        //     }
+        // });
 
         function create(){
             var postData = {
+                name:document.getElementById("name").value,
                 service: document.getElementById("service").value,
                 description:  document.getElementById("description").value,
                 category: document.getElementById("category").value,
@@ -83,38 +84,30 @@
                 lowestBid: document.getElementById("lowestBid").value
             };
 
-            array.push(postData);
+            // array.push(postData);
 
-            firebase.database().ref('users/' + user.uid).set({
-                username: username,
-                age: age,
-                projects:array
-            });
-            // .then(function(){
-                // window.location = document.getElementById('link').href;
+            // firebase.database().ref('users/' + user.uid).set({
+            //     username: username,
+            //     age: age,
+            //     projects:array
             // });
-            var projectArray = [];
-            firebase.database().ref('/projects').once('value').then(function(snapshot) {
-                console.log(snapshot.val())
-                projectArray = snapshot.val()
-            });
-            projectArray.push(postData);
-
-            firebase.database().ref('/').set({
-                projects:projectArray
-            }).then(function(){
-                window.location = document.getElementById('link').href;
-            });
 
 
-                // user.updateProfile({
-                //     projects: array,
-                // }).then(function() {
-                //     var database = firebase.database();
-                // }, function(error) {
-                //     console.log(error.message);
-                //     document.getElementById("error").innerHTML = error.message;
-                // });
+            var postKey = firebase.database().ref().child('projects').push().key;
+
+            var updates = {};
+            updates['/projects/' + postKey] = postData;
+
+            firebase.database().ref().update(updates);
+
+            var postKey2 = firebase.database().ref().child('/users/' + userId + '/projects/').push().key;
+
+            var updates2 = {};
+            updates2['/users/'  + userId + '/projects/' + postKey2] = postData;
+            
+            firebase.database().ref().update(updates2);
+
+            // window.location = document.getElementById("link").href 
         }
 
     </script>
