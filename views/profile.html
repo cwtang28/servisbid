@@ -41,19 +41,23 @@
             console.log(userId)
             firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
                 console.log(snapshot.val())
-                var username = snapshot.val().username;
+                var username = snapshot.val()["username"];
                 console.log(username)
                 document.getElementById("username").innerHTML = username
             });
 
             firebase.database().ref('/projects').once('value').then(function(snapshot) {
-                for (var x=0; x<= snapshot.val().count; x++){
-                    console.log('hi')
+                console.log(snapshot.val());
+                if(snapshot.val() != null){
+                    for (var x=0; x<= snapshot.numChildren(); x++){
+                        console.log('hi')
+                    }
                 }
-                var username = snapshot.val().username;
-                console.log(username)
-                document.getElementById("username").innerHTML = username
+                else{
+                    console.log("no projects yet");
+                }
             });
+
         } else {
             // No user is signed in.
             }

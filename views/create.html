@@ -23,9 +23,11 @@
         <textarea rows="5" cols="80" placeholder="Description" id="description"></textarea><br>
         <input type="text" class="register-input" id="category" placeholder="Category"><br>    
         <input type="text" class="register-input" id="location" placeholder="location"><br>
-        <input type="text" class="register-input" id="lowestBid" placeholder="lowestBid"><br>
+        <input type="number" class="register-input" id="lowestBid" placeholder="lowestBid"><br>
         <p id="error"></p>
         <button type="button" onclick="create()" value="Login" class="register-button">Create</button>
+        <a style="display:none" href="/profile" id="link"></a>
+        <a style="display:none" href="/login" id="notLoggedIn"></a>
     </form>
 
     <script>
@@ -40,27 +42,70 @@
         firebase.initializeApp(config);
 
         var user = firebase.auth().currentUser;
-        console.log(user.username)
+        var userId = "";
+        var username = "";
+        var age = "";
 
         firebase.auth().onAuthStateChanged(function(tempuser) {
             if (tempuser) {
                 user = tempuser;
+                userId = tempuser.uid
+                firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+                    console.log(snapshot.val())
+                    username = snapshot.val()["username"];
+                    console.log(username)
+                    document.getElementById("username").innerHTML = username
+                    age = snapshot.val()["age"];
+                });
             } else {
-                // No user is signed in.
+                window.location = document.getElementById("notLoggedIn").href
+            }
+        });
+
+
+
+
+        var array = new Array();
+
+        firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
+            console.log(snapshot.val())
+            if(snapshot.val() != null){
+                array = snapshot.val()  
             }
         });
 
         function create(){
-                var array = new Array();
-                
-                firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
-                    console.log(snapshot.val())
-                    array = snapshot.val()
-                    document.getElementById("username").innerHTML = username
-                });
-                var tempArray = [document.getElementById("name").value,document.getElementById("service").value, document.getElementById("description").value, document.getElementById("category").value, document.getElementById("location").value, document.getElementById("lowestBid").value];
+            var postData = {
+                service: document.getElementById("service").value,
+                description:  document.getElementById("description").value,
+                category: document.getElementById("category").value,
+                location: document.getElementById("location").value,
+                lowestBid: document.getElementById("lowestBid").value
+            };
 
-                array.push(tempArray);
+            array.push(postData);
+
+            firebase.database().ref('users/' + user.uid).set({
+                username: username,
+                age: age,
+                projects:array
+            });
+            // .then(function(){
+                // window.location = document.getElementById('link').href;
+            // });
+            var projectArray = [];
+            firebase.database().ref('/projects').once('value').then(function(snapshot) {
+                console.log(snapshot.val())
+                projectArray = snapshot.val()
+            });
+            projectArray.push(postData);
+
+            firebase.database().ref('/').set({
+                projects:projectArray
+            }).then(function(){
+                window.location = document.getElementById('link').href;
+            });
+
 
                 // user.updateProfile({
                 //     projects: array,
@@ -70,7 +115,6 @@
                 //     console.log(error.message);
                 //     document.getElementById("error").innerHTML = error.message;
                 // });
-            }
         }
 
     </script>

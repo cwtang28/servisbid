@@ -27,7 +27,7 @@
         <button type="button" onclick="register()">Create Account</button>
         <p style = "margin-top: 20px;">Already have an account? Sign in <a href = "/login">here!</a></p>
     </form>
-    <a href="/login" id="link" style="display:none"> </a>
+    <a href="/profile" id="link" style="display:none"> </a>
 
     <script>
         var config = {
@@ -46,23 +46,18 @@
                     var database = firebase.database();
 
                     if (user) {
-                        console.log(document.getElementById("age").value)
                         firebase.database().ref('users/' + user.uid).set({
                             username: document.getElementById("username").value,
                             age: document.getElementById("age").value
                         }).then(function(){
-                            window.location = document.getElementById('link').href;
-                        });
-
-                        // user.updateProfile({
-                        //   username: document.getElementById("username").value,
-                        //   birthday: document.getElementById("age").value
-                        // }).then(function() {
-                        //     window.location = document.getElementById('link').href;
-                        // }, function(error) {
-                        //     console.log(error.message);
-                        //     document.getElementById("error").innerHTML = error.message;
-                        // });
+                            firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).then(function(){ 
+                                var user = firebase.auth().currentUser;
+                                if (user) {
+                                    console.log("got here");
+                                    window.location = document.getElementById('link').href;
+                                }
+                            })
+                        })
                     }
             }).catch(function(error) {
                 console.log(error.code)
