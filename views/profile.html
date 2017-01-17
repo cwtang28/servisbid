@@ -12,8 +12,15 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
-
 </head>
+
+<style>
+table{
+  border-collapse: collapse;
+  width:100%;
+}
+
+</style>
 
 <body>
     <label id="username"></label><br>
@@ -23,11 +30,11 @@
         <input type="text" class="register-input" id="search" placeholder="Search">
         <input tpye="text" class="register-input" id="location" placeholder="Location">
         <p id="error"></p>
-        <button type="button" onclick="search()">Search</button>
-
-        <p style = "margin-top:20px;">Don't have an account? <a href = "/register">Sign Up!</a></p>
+        <button type="button" onclick="searchProjects()" value="search" class="register-button">search</button>
     </form>
-    <table id="projectsTable">
+    <p style = "margin-top:20px;">Don't have an account? <a href = "/register">Sign Up!</a></p>
+
+    <table id="projectsTable" border="1">
     </table>
 
     <a href="/login" id="notLoggedIn" style="display:none"> </a>
@@ -55,31 +62,55 @@
             }
         });
 
-        var arrayData  = [];
 
-        function search(){
-            console.log(" got here");
-            firebase.database().ref('/projects').once('value').then(function(snapshot) {
-                for (var x=0; x < snapshot.numChildren(); x++){
-                    console.log(snapshot.val())
-                    var key = snapshot.key; 
+        function searchProjects(){
+            var keys = [];
+
+            // var elmtTable = document.getElementById('projectsTable');
+            // var tableRows = elmtTable.getElementsByTagName('tr');
+            //     var rowCount = tableRows.length;
+
+            //     for (var x=rowCount-1; x>0; x--) {
+            //        elmtTable.removeChild(tableRows[x]);
+            // }
+
+            var query = firebase.database().ref("projects").orderByKey();
+            query.once("value")
+            .then(function(snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                    var key = childSnapshot.key;
                     console.log(key)
-
-                    if(snapshot.val()["x"]["category"] == document.getElementById("category").value)  {
+                    keys.push(key);
+                });
+                firebase.database().ref('/projects').once('value').then(function(snapshot) {
+                for (var x=0; x < snapshot.numChildren(); x++){
+                    console.log(snapshot.val()[keys[x]]["category"]);
+                    console.log(document.getElementById("category").value)
+                    if(snapshot.val()[keys[x]]["category"] == document.getElementById("category").value)  {
 
                         var table = document.getElementById("projectsTable");
-                        var row = table.insertRow(0);
 
+                        var row = table.insertRow(0);
                         var cell1 = row.insertCell(0);
                         var cell2 = row.insertCell(1);
                         var cell3 = row.insertCell(2);
                         var cell4 = row.insertCell(3);
                         var cell5 = row.insertCell(4);
-                        // cell1.innerHTML = snapshot.val()["x"][""];
+                        var cell6 = row.insertCell(5);
+
+                        cell1.innerHTML = snapshot.val()[keys[x]]["name"]
+                        cell2.innerHTML = snapshot.val()[keys[x]]["category"]
+                        cell3.innerHTML = snapshot.val()[keys[x]]["location"]
+                        cell4.innerHTML = snapshot.val()[keys[x]]["service"];
+                        cell5.innerHTML = snapshot.val()[keys[x]]["lowestBid"]
+                        cell6.innerHTML = snapshot.val()[keys[x]]["description"]
                     }
                 }
             });
+            });
         }
+
+        // var arrayData  = []
     </script>
 
 </body>
