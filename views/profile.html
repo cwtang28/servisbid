@@ -11,15 +11,19 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
 </head>
 
 <body>
+    <label id="username"></label>
     <button><a href="/createProject"> New Project</a></button>
     <table>
 
     </table>
 
     <script>
+    
         var config = {
             apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
             authDomain: "yodelbackend.firebaseapp.com",
@@ -28,7 +32,22 @@
             messagingSenderId: "609174959546"
         };
         firebase.initializeApp(config);
+        // console.log(user.username)
 
+        firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            console.log(user.email);
+            var userId = firebase.auth().currentUser.uid;
+            console.log(userId)
+            firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+                console.log(snapshot.val())
+                var username = snapshot.val().username;
+                document.getElementById("username").value = username
+            });
+        } else {
+            // No user is signed in.
+            }
+        });
     </script>
 
 </body>

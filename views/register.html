@@ -11,6 +11,8 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
 </head>
 
 <body id="page-top">
@@ -25,7 +27,7 @@
         <button type="button" onclick="register()">Create Account</button>
         <p style = "margin-top: 20px;">Already have an account? Sign in <a href = "/login">here!</a></p>
     </form>
-    <a href="/profile" id="link" style="display:none"> </a>
+    <a href="/login" id="link" style="display:none"> </a>
 
     <script>
         var config = {
@@ -41,17 +43,26 @@
         function register(){
             firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).then(function(){
                     var user = firebase.auth().currentUser;
+                    var database = firebase.database();
 
                     if (user) {
-                        user.updateProfile({
-                          username: document.getElementById("username").value,
-                          birthday: document.getElementById("age").value
-                        }).then(function() {
+                        console.log(document.getElementById("age").value)
+                        firebase.database().ref('users/' + user.uid).set({
+                            username: document.getElementById("username").value,
+                            age: document.getElementById("age").value
+                        }).then(function(){
                             window.location = document.getElementById('link').href;
-                        }, function(error) {
-                            console.log(error.message);
-                            document.getElementById("error").innerHTML = error.message;
                         });
+
+                        // user.updateProfile({
+                        //   username: document.getElementById("username").value,
+                        //   birthday: document.getElementById("age").value
+                        // }).then(function() {
+                        //     window.location = document.getElementById('link').href;
+                        // }, function(error) {
+                        //     console.log(error.message);
+                        //     document.getElementById("error").innerHTML = error.message;
+                        // });
                     }
             }).catch(function(error) {
                 console.log(error.code)

@@ -16,8 +16,15 @@
 
 <body>
     <form class="login">
-        <input type="email" class="register-input" id="email" placeholder="Email address">
-        <input type="password" class="register-input" id="password" placeholder="Password">
+        <label id="username"></label>
+
+        <input type="text" class="register-input" id="name" placeholder="Name"><br>    
+        <!-- <input type="textarea" class="register-input" id="description" placeholder="Description"> -->
+        <input type="text" class="register-input" id="service" placeholder="Service Required"><br>    
+        <textarea rows="5" cols="80" placeholder="Description" id="description"></textarea><br>
+        <input type="text" class="register-input" id="category" placeholder="Category"><br>    
+        <input type="text" class="register-input" id="location" placeholder="location"><br>
+        <input type="text" class="register-input" id="lowestBid" placeholder="lowestBid"><br>
         <p id="error"></p>
         <button type="button" onclick="create()" value="Login" class="register-button">Create</button>
     </form>
@@ -32,10 +39,12 @@
         };
 
         firebase.initializeApp(config);
+        
+        var user = firebase.auth().currentUser;
+        console.log(user.username)
+
 
         function create(){
-            var user = firebase.auth().currentUser();
-
             if (user) {
                 var array = new Array();
 
@@ -48,11 +57,13 @@
                 user.updateProfile({
                     projects: array,
                 }).then(function() {
-                    window.location = document.getElementById('link').href;
+                    var database = firebase.database();
                 }, function(error) {
                     console.log(error.message);
                     document.getElementById("error").innerHTML = error.message;
                 });
+
+
             }
         }
 
