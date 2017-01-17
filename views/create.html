@@ -16,10 +16,9 @@
 
 <body>
     <form class="login">
-        <label id="username"></label>
+        <label id="username"></label><br>
 
-        <input type="text" class="register-input" id="name" placeholder="Name"><br>    
-        <!-- <input type="textarea" class="register-input" id="description" placeholder="Description"> -->
+        <input type="text" class="register-input" id="name" placeholder="Name"><br>
         <input type="text" class="register-input" id="service" placeholder="Service Required"><br>    
         <textarea rows="5" cols="80" placeholder="Description" id="description"></textarea><br>
         <input type="text" class="register-input" id="category" placeholder="Category"><br>    
@@ -39,31 +38,38 @@
         };
 
         firebase.initializeApp(config);
-        
+
         var user = firebase.auth().currentUser;
         console.log(user.username)
 
+        firebase.auth().onAuthStateChanged(function(tempuser) {
+            if (tempuser) {
+                user = tempuser;
+            } else {
+                // No user is signed in.
+            }
+        });
 
         function create(){
-            if (user) {
                 var array = new Array();
-
-                if(user.project != null){
-                    array = user.projects;
-                }
                 
-                array.push(document.getElementById("projectName").value);
-
-                user.updateProfile({
-                    projects: array,
-                }).then(function() {
-                    var database = firebase.database();
-                }, function(error) {
-                    console.log(error.message);
-                    document.getElementById("error").innerHTML = error.message;
+                firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
+                    console.log(snapshot.val())
+                    array = snapshot.val()
+                    document.getElementById("username").innerHTML = username
                 });
+                var tempArray = [document.getElementById("name").value,document.getElementById("service").value, document.getElementById("description").value, document.getElementById("category").value, document.getElementById("location").value, document.getElementById("lowestBid").value];
 
+                array.push(tempArray);
 
+                // user.updateProfile({
+                //     projects: array,
+                // }).then(function() {
+                //     var database = firebase.database();
+                // }, function(error) {
+                //     console.log(error.message);
+                //     document.getElementById("error").innerHTML = error.message;
+                // });
             }
         }
 
