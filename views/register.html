@@ -44,7 +44,7 @@
             firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).then(function(){
                     var user = firebase.auth().currentUser;
                     var database = firebase.database();
-
+                
                     if (user) {
                         firebase.database().ref('users/' + user.uid).set({
                             username: document.getElementById("username").value,

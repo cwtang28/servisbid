@@ -28,11 +28,11 @@
         <p style = "margin-top:20px;">Don't have an account? <a href = "/register">Sign Up!</a></p>
     </form>
     <table id="projectsTable">
-
     </table>
 
+    <a href="/login" id="notLoggedIn" style="display:none"> </a>
+
     <script>
-    
         var config = {
             apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
             authDomain: "yodelbackend.firebaseapp.com",
@@ -43,44 +43,40 @@
         firebase.initializeApp(config);
 
         firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            console.log(user.email);
-            var userId = firebase.auth().currentUser.uid;
-            console.log(userId)
-            firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
-                console.log(snapshot.val())
-                var username = snapshot.val()["username"];
-                console.log(username)
-                document.getElementById("username").innerHTML = username
-            });
-        } else {
-            // No user is signed in.
+            if (user) {
+                var userId = firebase.auth().currentUser.uid;
+                firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+                    var username = snapshot.val()["username"];
+                    document.getElementById("username").innerHTML = username
+                });
+            } 
+            else {
+                window.location = document.getElementById("notLoggedIn").href
             }
         });
 
+        var arrayData  = [];
+
         function search(){
+            console.log(" got here");
             firebase.database().ref('/projects').once('value').then(function(snapshot) {
-                console.log(snapshot.val());
-                if(snapshot.val() != null){
-                    if(category != ""){
-                        for (var x=0; x < snapshot.numChildren(); x++){
-                            if(snapshot.val()["x"]["category"] == document.getElementById("category").value)  {
+                for (var x=0; x < snapshot.numChildren(); x++){
+                    console.log(snapshot.val())
+                    var key = snapshot.key; 
+                    console.log(key)
 
-                                var table = document.getElementById("projectsTable");
-                                var row = table.insertRow(0);
+                    if(snapshot.val()["x"]["category"] == document.getElementById("category").value)  {
 
-                                var cell1 = row.insertCell(0);
-                                var cell2 = row.insertCell(1);
-                                var cell3 = row.insertCell(2);
-                                var cell4 = row.insertCell(3);
-                                var cell5 = row.insertCell(4);
-                                cell1.innerHTML = snapshot.val()["x"][""];
-                            }
-                        }
+                        var table = document.getElementById("projectsTable");
+                        var row = table.insertRow(0);
+
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        var cell5 = row.insertCell(4);
+                        // cell1.innerHTML = snapshot.val()["x"][""];
                     }
-                }
-                else{
-                    console.log("no projects yet");
                 }
             });
         }

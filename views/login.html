@@ -37,11 +37,11 @@
 
         function login(){
             firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value, document.getElementById("password").value).then(function(){ 
-                    var user = firebase.auth().currentUser;
+                var user = firebase.auth().currentUser;
 
-                    if (user) {
-                        window.location = document.getElementById('link').href;
-                    }
+                if (user) {
+                    window.location = document.getElementById('link').href;
+                }
             }).catch(function(error) {
                 document.getElementById("error").innerHTML = error.message;           
             });
