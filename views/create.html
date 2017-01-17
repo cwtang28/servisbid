@@ -61,19 +61,7 @@
                 window.location = document.getElementById("notLoggedIn").href
             }
         });
-
-
-
-
-        // var array = new Array();
-
-        // firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
-        //     console.log(snapshot.val())
-        //     if(snapshot.val() != null){
-        //         array = snapshot.val()  
-        //     }
-        // });
-
+        
         function create(){
             var postData = {
                 name:document.getElementById("name").value,
@@ -83,15 +71,6 @@
                 location: document.getElementById("location").value,
                 lowestBid: document.getElementById("lowestBid").value
             };
-
-            // array.push(postData);
-
-            // firebase.database().ref('users/' + user.uid).set({
-            //     username: username,
-            //     age: age,
-            //     projects:array
-            // });
-
 
             var postKey = firebase.database().ref().child('projects').push().key;
 
@@ -107,7 +86,7 @@
             
             firebase.database().ref().update(updates2);
 
-            // window.location = document.getElementById("link").href 
+            window.location = document.getElementById("link").href 
         }
 
     </script>
