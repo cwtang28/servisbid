@@ -29,6 +29,14 @@ app.get('/profile', function(req, res){
 	res.render('profile.html');
 })
 
+app.get('/projectDetails', function(req,res){
+	res.render('/profile')
+})
+
+app.get('/yourProjectDetails', function(req,res){
+	res.render('/profile')
+})
+
 app.post('/projectDetails', function(req, res){
     var user = req.param('name');
     var category = req.param('category');
