@@ -152,15 +152,6 @@
             bidderUserName:userName,
             bidValue:bidValue
         }
-        console.log(name)
-        console.log(bidderData)
-        console.log(false)
-        console.log(service)
-        console.log(description)
-        console.log(category)
-        console.log(location)
-        console.log(lowestBid)
-        console.log(creator)
 
         var postData = {
             user:name,
@@ -181,7 +172,12 @@
         var updates = {};
         var updates2 = {};
         updates['/projects/' + projKey] = postData;
-        updates2['/users/' + creator + '/projects/' + projKey];
+
+        console.log(creator)
+        console.log(projKey)
+
+        updates2['/users/' + creator + '/projects/' + projKey] = postData;
+
         firebase.database().ref().update(updates);
         firebase.database().ref().update(updates2);
     }
