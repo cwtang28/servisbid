@@ -37,7 +37,7 @@ app.post('/projectDetails', function(req, res){
     var lowestBid = req.param('lowestBid');
     var description = req.param('description');
     var key = req.param('key');
-
+    var id = req.param('creator');
     console.log(user)
     console.log(category)
     console.log(location)
@@ -51,8 +51,9 @@ app.post('/projectDetails', function(req, res){
     	location:location,
     	service:service, 
     	lowestBid:lowestBid, 
-    	description:description 
-    	key:key
+    	description:description,
+    	key:key,
+    	creator:id
     });
 });
 

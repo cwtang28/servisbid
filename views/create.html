@@ -69,7 +69,8 @@
                 description:  document.getElementById("description").value,
                 category: document.getElementById("category").value,
                 location: document.getElementById("location").value,
-                lowestBid: document.getElementById("lowestBid").value
+                lowestBid: document.getElementById("lowestBid").value,
+                creatorId:userId
             };
 
             var postKey = firebase.database().ref().child('projects').push().key;
@@ -79,10 +80,10 @@
 
             firebase.database().ref().update(updates);
 
-            var postKey2 = firebase.database().ref().child('/users/' + userId + '/projects/').push().key;
+            // var postKey2 = firebase.database().ref().child('/users/' + userId + '/projects/').push().key;
 
             var updates2 = {};
-            updates2['/users/'  + userId + '/projects/' + postKey2] = postData;
+            updates2['/users/'  + userId + '/projects/' + postKey] = postData;
             
             firebase.database().ref().update(updates2);
 
