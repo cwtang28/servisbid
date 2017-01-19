@@ -36,6 +36,7 @@ app.post('/projectDetails', function(req, res){
     var service = req.param('service');
     var lowestBid = req.param('lowestBid');
     var description = req.param('description');
+    var key = req.param('key');
 
     console.log(user)
     console.log(category)
@@ -51,6 +52,7 @@ app.post('/projectDetails', function(req, res){
     	service:service, 
     	lowestBid:lowestBid, 
     	description:description 
+    	key:key
     });
 });
 

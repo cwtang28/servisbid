@@ -15,7 +15,24 @@
 
 <body style="overflow-x: hidden; overflow-y: hidden;">
     <a href="/profile"> <button> back </button></a>
-    <!-- <h1>{{ user }} </h1> -->
+    <header>
+        <h1>{{ user }} </h1>
+        <h3 style="color:gray">{{ category }} </h3>
+        <p style="color:gray"> {{ location }}</p>
+        <hr>
+    </header>
+    <h4> {{ service }} </h4>
+    <p>{{ description }}</p>
+    <p> ${{ lowestBid }} </p>
+
+    <form> 
+        <label> Bid? </label><br>
+        <input type="text" class="register-input" id="newBid"> <br><br>
+        <label> Comments </label><br>
+        <textarea id="comments" rows="4" cols="50"></textarea><br>
+        <button id="submitBidButton">Submit</button>
+    </form>
+    <a href="/projects" id="link" style="display:none"> </a>
 
     <!-- <h1 class="login-title">Login</h1>
     <form class="login">
@@ -28,23 +45,85 @@
     <a href="/profile" id="link" style="display:none"> </a> -->
 </body>
 
-    <script>
-        var name = "{{ user }}";
-        var category = "{{ category }}";
-        var userLocation = "{{ location }}";
-        var service = "{{ service }}";
-        var lowestBid = "{{ lowestBid }}";
-        var description = "{{ description }}";
+<script>
+    var name = "{{ user }}";
+    var category = "{{ category }}";
+    var userLocation = "{{ location }}";
 
-        var config = {
-            apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
-            authDomain: "yodelbackend.firebaseapp.com",
-            databaseURL: "https://yodelbackend.firebaseio.com",
-            storageBucket: "yodelbackend.appspot.com",
-            messagingSenderId: "609174959546"
+    var service = "{{ service }}";
+    var lowestBid = "{{ lowestBid }}";
+    var description = "{{ description }}";
+    var key = "{{ key }}";
+
+    var config = {
+        apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
+        authDomain: "yodelbackend.firebaseapp.com",
+        databaseURL: "https://yodelbackend.firebaseio.com",
+        storageBucket: "yodelbackend.appspot.com",
+        messagingSenderId: "609174959546"
+    };
+    var userId = "";
+    firebase.initializeApp(config);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            userId = firebase.auth().currentUser.uid;
+        }
+    })
+
+
+    var query = firebase.database().ref("projects/" + key).orderByKey();
+        query.once("value")
+        .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+                var key = childSnapshot.key;
+                console.log(key)
+                keys.push(key);
+            });
+
+            firebase.database().ref('/projects').once('value').then(function(snapshot) {
+                for (var x=0; x < snapshot.numChildren(); x++){
+                    var table = document.getElementById("projectsTable");
+
+                    var row = table.insertRow(0);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    var cell6 = row.insertCell(5);
+                    var button = row.insertCell(6);
+
+                    cell1.innerHTML = snapshot.val()[keys[x]]["name"]
+                    cell2.innerHTML = snapshot.val()[keys[x]]["category"]
+                    cell3.innerHTML = snapshot.val()[keys[x]]["location"]
+                    cell4.innerHTML = snapshot.val()[keys[x]]["service"];
+                    cell5.innerHTML = snapshot.val()[keys[x]]["lowestBid"]
+                    cell6.innerHTML = snapshot.val()[keys[x]]["description"]
+
+                    button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[keys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <button id="details" value="upvote">Details</button></form>';
+                }
+            })
+        });
+
+
+    function submitBid(){
+        var postData = {
+            bid:document.getElementById("newBid").value,
+            comments:document.getElementById("comments").value
         };
-        firebase.initializeApp(config);
 
-    </script>
+        var postKey = firebase.database().ref().child('projects').child(key).child('bids').push().key;
+
+        var updates = {};
+        updates['/projects/' + key + '/bids/' + postKey] = postData;
+        firebase.database().ref().update(updates);
+        // var postKey2 = firebase.database().ref().child('/users/' + userId + '/helper/' + key).push().key;
+        // var updates2 = {};
+        // updates2['/users/'  + userId + '/helper/' + postKey2] = postData;
+        // firebase.database().ref().update(updates2);
+        // window.location = document.getElementById("link").href 
+    }
+</script>
 
 </html>
