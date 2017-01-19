@@ -29,6 +29,11 @@ app.get('/profile', function(req, res){
 	res.render('profile.html');
 })
 
+app.post('/projectDetails', function(req, res){
+    // var user = req.param('name');
+    // console.log(user);
+    // res.render('login.html', { user:user } );
+});
 
 app.listen(8000)
 console.log('running on 8000');
