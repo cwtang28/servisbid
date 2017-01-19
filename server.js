@@ -30,10 +30,35 @@ app.get('/profile', function(req, res){
 })
 
 app.post('/projectDetails', function(req, res){
-    // var user = req.param('name');
-    // console.log(user);
-    // res.render('login.html', { user:user } );
+    var user = req.param('name');
+    var category = req.param('category');
+    var location = req.param('location');
+    var service = req.param('service');
+    var lowestBid = req.param('lowestBid');
+    var description = req.param('description');
+
+    console.log(user)
+    console.log(category)
+    console.log(location)
+    console.log(service)
+    console.log(lowestBid)
+    console.log(description)
+
+    res.render('projectDetails.html', { 
+    	user:user, 
+    	category:category,
+    	location:location,
+    	service:service, 
+    	lowestBid:lowestBid, 
+    	description:description 
+    });
 });
+
+// app.use(function(req, res, next) {
+//   	var err = new Error('Not Found');
+//   	err.status = 404;
+//   	next(err);
+// });
 
 app.listen(8000)
 console.log('running on 8000');
