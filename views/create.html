@@ -70,7 +70,8 @@
                 category: document.getElementById("category").value,
                 location: document.getElementById("location").value,
                 lowestBid: document.getElementById("lowestBid").value,
-                creatorId:userId
+                creatorId:userId,
+                open:true
             };
 
             var postKey = firebase.database().ref().child('projects').push().key;

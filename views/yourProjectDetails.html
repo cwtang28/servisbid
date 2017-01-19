@@ -24,7 +24,7 @@
     table td {
         width: 20%;
     }
-    button#details{
+    button#accept{
         width:100%;
     }
 </style>
@@ -39,20 +39,20 @@
     </header>
     <h4> {{ service }} </h4>
     <p>{{ description }}</p>
-    <!-- <p> ${{ lowestBid }} </p> -->
+    <p> ${{ lowestBid }} </p>
 
-    <form> 
+    <!-- <form> 
         <label> Bid? </label><br>
         <input type="text" class="register-input" id="newBid"> <br><br>
         <label> Comments </label><br>
         <textarea id="comments" rows="4" cols="50"></textarea><br>
         <button id="submitBidButton" onclick="submitBid()">Submit</button>
         <p id="error"></p>
-    </form>
+    </form> -->
     <a style="display:none" href="/profile" id="done"></a>
 
     <label> currentBids </label>
-    <table id="bidsTable" border="1"><tr> <td>name</td> <td> value </td> </table>
+    <table id="bidsTable" border="1"><tr> <td>name</td> <td> value </td> <td> comments </td> <td> accept offer</td></table>
 </body>
 
 <script>
@@ -63,6 +63,7 @@
     var service = "{{ service }}";
     var lowestBid = "{{ lowestBid }}";
     var description = "{{ description }}";
+    
     var tempKey = "{{ key }}";
     var projKeyArray = tempKey.split(',');
     var projKey = projKeyArray[0];
@@ -98,6 +99,7 @@
         var names = [];
         var bidValues = [];
         var comments = [];
+        var userIds = [];
         firebase.database().ref('/projects' + '/' + projKey + '/bids').once('value').then(function(snapshot) {
             console.log(projKey)
             console.log(snapshot.numChildren())
@@ -109,12 +111,11 @@
                 var comment = snapshot.val()[keys[x]]["comments"];
                 bidValues.push(bidValue);
                 comments.push(comment);
-                firebase.database().ref('users/' + snapshot.val()[keys[x]]["user"] + '/username').once('value').then(function(snapshot2){
-                    var username = snapshot2.val();
+                firebase.database().ref('users/' + snapshot.val()[keys[x]]["user"]).once('value').then(function(snapshot2){
+                    var username = snapshot2.val()["username"];
+                    console.log(snapshot2.key)
+                    userIds.push(snapshot2.key);
                     names.push(username);
-                    // console.log("got here")
-                    // console.log(names.length)
-                    // setTimeout(cell1.innerHTML = username, 500);
                 })
             }
 
@@ -127,15 +128,63 @@
             var row = table.insertRow(-1);
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
-            // var cell3 = row.insertCell(2);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            
             cell1.innerHTML = names[x]
             cell2.innerHTML = bidValues[x]
-            
-}}
-            ,2000)
+            cell3.innerHTML = comments[x]
+
+            cell4.innerHTML = '<button id="accept" onclick="acceptBid(\'' + names[x] + ',' + bidValues[x] + ',' + userIds[x] + '\')" value="upvote">Accept</button></form>';
+
+        }}, 2000)
     });
 
+    function acceptBid(name){
+        console.log(name)
+        var realData = name.split(',');
+        var userName = realData[0]
+        var bidValue = realData[1]
+        var bidder = realData[2];
 
+        var bidderData = {
+            bidderId:bidder,
+            bidderUserName:userName,
+            bidValue:bidValue
+        }
+        console.log(name)
+        console.log(bidderData)
+        console.log(false)
+        console.log(service)
+        console.log(description)
+        console.log(category)
+        console.log(location)
+        console.log(lowestBid)
+        console.log(creator)
+
+        var postData = {
+            user:name,
+            acceptedBid:bidderData,
+            open:false,
+            service: service,
+            description:  description,
+            category: category,
+            location: userLocation,
+            lowestBid: lowestBid,
+            creatorId:creator
+        };
+
+        console.log(projKey)
+
+        var postKey = firebase.database().ref().child('projects').child(projKey).push().key;
+
+        var updates = {};
+        var updates2 = {};
+        updates['/projects/' + projKey] = postData;
+        updates2['/users/' + creator + '/projects/' + projKey];
+        firebase.database().ref().update(updates);
+        firebase.database().ref().update(updates2);
+    }
 
     function submitBid(){
         if(document.getElementById("newBid").value != "" && document.getElementById("newBid").value >= parseInt(lowestBid)){
@@ -143,22 +192,17 @@
                 user:userId,
                 bid:document.getElementById("newBid").value,
                 comments:document.getElementById("comments").value
+
             };
 
             var postKey = firebase.database().ref().child('projects').child(projKey).child('bids').push().key;
 
             var updates = {};
-            updates['/projects/' + projKey + '/bids/' + postKey] = postData;
+            updates['/projects/' + projKey + '/bids/' + projKey] = postData;
+
             firebase.database().ref().update(updates);
 
-            // var postKey2 = firebase.database().ref().child('users').child(projKey).child('bids').push().key;
-
-            // var updates = {};
-            // updates['/projects/' + projKey + '/bids/' + postKey] = postData;
-            // firebase.database().ref().update(updates);
-            // window.location = document.getElementById("done").href
-
-            window.location = document.getElementById("link").href;
+            // var updates2 = {};
         } 
         else{
             document.getElementById("error").value = "Please provide a valid value for new bid"
