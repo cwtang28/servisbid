@@ -30,11 +30,11 @@ app.get('/profile', function(req, res){
 })
 
 app.get('/projectDetails', function(req,res){
-	res.render('/profile')
+	res.render('profile.html')
 })
 
 app.get('/yourProjectDetails', function(req,res){
-	res.render('/profile')
+	res.render('/profile.html')
 })
 
 app.post('/projectDetails', function(req, res){
