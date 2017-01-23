@@ -175,7 +175,7 @@
 
         updates['/projects/' + projKey] = postData;
         updates2['/users/' + creator + '/projects/' + projKey] = postData;
-        updates3['/users/' + bidder + '/worker' + projKey] = postData;
+        updates3['/users/' + bidder + '/worker/' + projKey] = postData;
 
         firebase.database().ref().update(updates);
         firebase.database().ref().update(updates2);

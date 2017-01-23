@@ -50,7 +50,6 @@
         <p id="error"></p>
     </form>
     <a style="display:none" href="/profile" id="done"></a>
-
     <label> currentBids </label>
     <table id="bidsTable" border="1"><tr> <td>name</td> <td> value </td> </table>
 </body>
@@ -158,7 +157,7 @@
             // firebase.database().ref().update(updates);
             // window.location = document.getElementById("done").href
 
-            window.location = document.getElementById("link").href;
+            window.location = document.getElementById("done").href;
         } 
         else{
             document.getElementById("error").value = "Please provide a valid value for new bid"
