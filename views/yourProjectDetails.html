@@ -41,14 +41,6 @@
     <p>{{ description }}</p>
     <p> ${{ lowestBid }} </p>
 
-    <!-- <form> 
-        <label> Bid? </label><br>
-        <input type="text" class="register-input" id="newBid"> <br><br>
-        <label> Comments </label><br>
-        <textarea id="comments" rows="4" cols="50"></textarea><br>
-        <button id="submitBidButton" onclick="submitBid()">Submit</button>
-        <p id="error"></p>
-    </form> -->
     <a style="display:none" href="/profile" id="done"></a>
 
     <label> currentBids </label>
@@ -68,6 +60,7 @@
     var projKeyArray = tempKey.split(',');
     var projKey = projKeyArray[0];
     var creator = "{{ creator }}";
+    var creatorEmail = "";
 
     var config = {
         apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
@@ -86,6 +79,13 @@
     })
 
     var keys=[];
+
+    var query = firebase.database().ref("users/" + creator + '/email').orderByKey();
+    query.once("value")
+    .then(function(snapshot) {
+        console.log(snapshot.val())
+        var creatorEmail = snapshot.val();
+    });
 
     var query = firebase.database().ref("projects/" + projKey + '/bids').orderByKey();
     query.once("value")
@@ -140,9 +140,8 @@
         }}, 2000)
     });
 
-    function acceptBid(name){
-        console.log(name)
-        var realData = name.split(',');
+    function acceptBid(name2){
+        var realData = name2.split(',');
         var userName = realData[0]
         var bidValue = realData[1]
         var bidder = realData[2];
@@ -153,6 +152,8 @@
             bidValue:bidValue
         }
 
+        console.log(name);
+
         var postData = {
             name:name,
             acceptedBid:bidderData,
@@ -162,48 +163,25 @@
             category: category,
             location: userLocation,
             lowestBid: lowestBid,
-            creatorId:creator
+            creatorId:creator,
+            creatorEmail:creatorEmail
         };
-
-        console.log(projKey)
 
         var postKey = firebase.database().ref().child('projects').child(projKey).push().key;
 
         var updates = {};
         var updates2 = {};
+        var updates3 = {};
+
         updates['/projects/' + projKey] = postData;
-
-        console.log(creator)
-        console.log(projKey)
-
         updates2['/users/' + creator + '/projects/' + projKey] = postData;
+        updates3['/users/' + bidder + '/worker' + projKey] = postData;
 
         firebase.database().ref().update(updates);
         firebase.database().ref().update(updates2);
+        firebase.database().ref().update(updates3);
     }
 
-    function submitBid(){
-        if(document.getElementById("newBid").value != "" && document.getElementById("newBid").value >= parseInt(lowestBid)){
-            var postData = {
-                user:userId,
-                bid:document.getElementById("newBid").value,
-                comments:document.getElementById("comments").value
-
-            };
-
-            var postKey = firebase.database().ref().child('projects').child(projKey).child('bids').push().key;
-
-            var updates = {};
-            updates['/projects/' + projKey + '/bids/' + projKey] = postData;
-
-            firebase.database().ref().update(updates);
-
-            // var updates2 = {};
-        } 
-        else{
-            document.getElementById("error").value = "Please provide a valid value for new bid"
-        }
-    }
 </script>
 
 </html>
