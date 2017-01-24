@@ -46,12 +46,6 @@ app.post('/projectDetails', function(req, res){
     var description = req.param('description');
     var key = req.param('key');
     var id = req.param('creator');
-    // console.log(user)
-    // console.log(category)
-    // console.log(location)
-    // console.log(service)
-    // console.log(lowestBid)
-    // console.log(description)
 
     res.render('projectDetails.html', { 
     	user:user, 
