@@ -79,12 +79,14 @@
     })
 
     var keys=[];
-
-    var query = firebase.database().ref("users/" + creator + '/email').orderByKey();
+    
+    console.log(creator);
+    var query = firebase.database().ref("users/" + creator).orderByKey();
     query.once("value")
     .then(function(snapshot) {
-        console.log(snapshot.val())
-        var creatorEmail = snapshot.val();
+        console.log(snapshot.val()["email"])
+        creatorEmail = snapshot.val()["email"];
+        console.log("got here")
     });
 
     var query = firebase.database().ref("projects/" + projKey + '/bids').orderByKey();
@@ -92,7 +94,7 @@
     .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var tempkey = childSnapshot.key;
-            // console.log(key)
+            
             keys.push(tempkey);
         });
 
@@ -122,7 +124,7 @@
         })
         window.setTimeout( function(){
 
-            console.log(names.length)
+            // console.log(names.length)
             for (var x = 0; x < names.length; x++){
             var table = document.getElementById("bidsTable");
             var row = table.insertRow(-1);
@@ -151,6 +153,8 @@
             bidderUserName:userName,
             bidValue:bidValue
         }
+
+        console.log(creatorEmail);
 
         var postData = {
             name:name,

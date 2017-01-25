@@ -149,7 +149,7 @@
             var updates = {};
             updates['/projects/' + projKey + '/bids/' + postKey] = postData;
             firebase.database().ref().update(updates);
-
+            
             // var postKey2 = firebase.database().ref().child('users').child(projKey).child('bids').push().key;
 
             // var updates = {};

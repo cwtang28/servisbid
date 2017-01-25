@@ -2,12 +2,21 @@ var express = require('express')
 var app = express();
 var bodyParser = require('body-parser');
 var engines = require('consolidate');
+var nodemailer = require('nodemailer');
 
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.static(__dirname));
 app.set('view engine', 'html');
 app.set('views', __dirname+'/views');
 app.engine('html', engines.mustache);
+
+
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+    }
+});
+
 
 app.get('/', function (req, res) {
 	res.render('index.html');
@@ -83,8 +92,25 @@ app.post('/yourProjectDetails', function(req,res){
 
 app.post('/doneWithProject', function(req,res){
     var userFinished = req.param('name');
-    var emailUser = req.param('')
+    var category = req.param('category');
+    var makerEmail = req.param('makeEmail')
+
+    // var mailOptions = {
+    //     from: , 
+    //     to: makerEmail,
+    //     subject: req.body.subject, 
+    //     text: "your project is done",
+    // };
+    // transporter.sendMail(mailOptions, function(error, info){
+    //     if(error){
+    //         console.log(error);
+    //     }
+
+    // });
+    
+    res.redirect('index.html');
 })
+
 
 // app.use(function(req, res, next) {
 //   	var err = new Error('Not Found');
