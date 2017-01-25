@@ -29,6 +29,10 @@
     button#details{
         width:100%;
     }
+
+    button#markDone{
+        width:100%;
+    }
 </style>
 
 <body>
@@ -127,11 +131,9 @@
                 var workingKeys = [];
                 console.log(userId)
 
-                console.log("/users/" + userId + '/worker')
                 var query2 = firebase.database().ref("/users/" + userId + '/worker').orderByKey();
                 query2.once("value")
                 .then(function(snapshot) {
-                    console.log("hi")
                     console.log(snapshot.numChildren())
                     snapshot.forEach(function(childSnapshot) {
                         var key = childSnapshot.key;
@@ -154,9 +156,6 @@
                             var cell7 = row.insertCell(6);
                             var button = row.insertCell(7);
 
-                            console.log(snapshot.val())
-                            console.log(snapshot.val()[workingKeys[x]])
-
                             cell1.innerHTML = snapshot.val()[workingKeys[x]]["name"]
                             cell2.innerHTML = snapshot.val()[workingKeys[x]]["category"]
                             cell3.innerHTML = snapshot.val()[workingKeys[x]]["location"]
@@ -165,7 +164,16 @@
                             cell6.innerHTML = snapshot.val()[workingKeys[x]]["description"]
                             cell7.innerHTML = snapshot.val()[workingKeys[x]]["creatorEmail"]
 
-                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + workingKeys[x] + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[workingKeys[x]]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[workingKeys[x]]["creatorId"] + '"> <button id="details">Finished</button></form>';
+                            console.log(snapshot.val());
+                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + workingKeys[x] + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[workingKeys[x]]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[workingKeys[x]]["creatorId"] + '"> <button id="markDone">Finished</button></form>';
+                            
+                            // var inputElement = document.getElementById('markDone');
+                            var tempKey =  Object.keys(snapshot.val())[0]
+
+                            button.addEventListener('click', function(){
+                                markDone(snapshot.val(), tempKey, userId, snapshot.val()[workingKeys[x]]["creatorId"]);
+                            });
+
                         }
                     });
                 });
@@ -270,6 +278,24 @@
                     }
                 });
             });
+        }
+
+        function markDone(values, key, workerId, creatorId){
+            console.log(values)
+            values.push({done:true});
+            console.log(values)
+
+            var updates = {};
+            var updates1 = {};
+            var updates2 = {};
+
+            updates['/projects/' + key] = values;
+            updates1['/users/' + workerId + key] = values;
+            updates2['/users/' + creatorId + key] = values;
+
+            firebase.database().ref().update(updates);
+            firebase.database().ref().update(updates1);
+            firebase.database().ref().update(updates2);
         }
 
         function logout(){

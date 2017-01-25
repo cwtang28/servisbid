@@ -94,21 +94,8 @@ app.post('/doneWithProject', function(req,res){
     var userFinished = req.param('name');
     var category = req.param('category');
     var makerEmail = req.param('makeEmail')
-
-    // var mailOptions = {
-    //     from: , 
-    //     to: makerEmail,
-    //     subject: req.body.subject, 
-    //     text: "your project is done",
-    // };
-    // transporter.sendMail(mailOptions, function(error, info){
-    //     if(error){
-    //         console.log(error);
-    //     }
-
-    // });
     
-    res.redirect('index.html');
+    res.redirect('/profile')
 })
 
 

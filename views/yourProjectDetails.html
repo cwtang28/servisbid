@@ -94,7 +94,7 @@
     .then(function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var tempkey = childSnapshot.key;
-            
+
             keys.push(tempkey);
         });
 
@@ -166,7 +166,8 @@
             location: userLocation,
             lowestBid: lowestBid,
             creatorId:creator,
-            creatorEmail:creatorEmail
+            creatorEmail:creatorEmail,
+            done:false
         };
 
         var postKey = firebase.database().ref().child('projects').child(projKey).push().key;
