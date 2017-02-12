@@ -105,5 +105,5 @@ app.post('/doneWithProject', function(req,res){
 //   	next(err);
 // });
 
-app.listen(8000)
-console.log('running on 8000');
+app.listen(8000);
+console.log('running on 8000 hopefully');
