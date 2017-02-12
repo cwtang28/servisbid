@@ -11,11 +11,11 @@ app.set('views', __dirname+'/views');
 app.engine('html', engines.mustache);
 
 
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-    }
-});
+// var transporter = nodemailer.createTransport({
+    // service: 'Gmail',
+    // auth: {
+    // }
+// });
 
 
 app.get('/', function (req, res) {
@@ -94,7 +94,8 @@ app.post('/doneWithProject', function(req,res){
     var userFinished = req.param('name');
     var category = req.param('category');
     var makerEmail = req.param('makeEmail')
-    
+    var location = req.param('location');
+    var service = req.param('service');
     res.redirect('/profile')
 })
 

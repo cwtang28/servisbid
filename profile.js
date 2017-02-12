@@ -1,81 +1,4 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]> <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]> <html class="lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Profile</title>
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-</head>
-
-<style>
-    table{
-        border-collapse: collapse;
-        width:100%;
-        table-layout: fixed;
-    }
-
-    table td {
-        width: 20%;
-    }
-    button#details{
-        width:100%;
-    }
-
-    .tableButton{
-    	width:100%;
-    }
-</style>
-
-<body>
-    <label id="username"></label><br>
-    <button><a href="/createProject"> New Project</a></button>
-    <br><br>
-
-    <label> My Projects</label><br>
-    <table id="yourTable" border="1"></table>
-    <br><br>
-
-    <label> My Bids </label> <br>
-    <table id="hiredTable" border="1">
-    </table>
-    <br><br>
-
-    <form class="search">
-        <input type="text" class="register-input" id="searchProject" placeholder="search">
-        <select id="searchType">
-            <option value="name">Name</option>
-            <option value="category" selected>Category</option>
-            <option value="location">Location</option>
-        </select>
-        <p id="error"></p>
-        <button type="button" onclick="searchProjects()" value="search" class="register-button">search</button>
-        <option></option>
-    </form>
-
-    <label> My Completed Work</label><br>
-    <table id="doneProjectsTable" border="1">
-    </table>
-    <br><br>
-
-    <label> Projects </label><br>
-    <table id="projectsTable" border="1">
-    </table>
-    <br><br>
-
-    <button onclick="logout()">Logout </button>
-    <a href="/login" id="notLoggedIn" style="display:none"> </a>
-    <a href="/" id="logout" style="display:none"> </a>
-
-    <script>
-    	var config = {
+var config = {
             apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
             authDomain: "yodelbackend.firebaseapp.com",
             databaseURL: "https://yodelbackend.firebaseio.com",
@@ -89,7 +12,6 @@
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 userId = firebase.auth().currentUser.uid;
-                console.log(userId)
                 firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
                     var username = snapshot.val()["username"];
                     document.getElementById("username").innerHTML = username
@@ -118,6 +40,7 @@
                             var cell5 = row.insertCell(4);
                             var cell6 = row.insertCell(5);
                             var button = row.insertCell(6);
+                            console.log(snapshot.val()[userKeys[x]])
 
                             cell1.innerHTML = snapshot.val()[userKeys[x]]["name"]
                             console.log(snapshot.val()[userKeys[x]]["name"]);
@@ -132,24 +55,21 @@
                     });
                 });
 
-                var tempKeys = [];
-                console.log(userId)
-                var query3 = firebase.database().ref("/users/" + userId + '/worker').orderByKey();
+                var userKeys = [];
+                var query2 = firebase.database().ref("users/" + userId + '/projects').orderByKey();
                 query2.once("value")
                 .then(function(snapshot) {
                     snapshot.forEach(function(childSnapshot) {
                         var key = childSnapshot.key;
                         console.log(key)
-                        tempKeys.push(key);
+                        userKeys.push(key);
                     });
 
-                    firebase.database().ref('/users/' + userId + '/worker').once('value').then(function(snapshot) {
+                    firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
+
                         for (var x=0; x < snapshot.numChildren(); x++){
-                        	tempKey = Object.keys(snapshot.val())[x]
-                        	console.log(tempKey)
-							console.log(snapshot.val()[tempKey["done"]])
-                        	if(snapshot.val()[tempKey]["done"] == true){
-	                            var table = document.getElementById("doneProjectsTable");
+                        	if(key[x]["open"] == false){
+                        		var table = document.getElementById("yourTable");
 
 	                            var row = table.insertRow(0);
 	                            var cell1 = row.insertCell(0);
@@ -158,21 +78,22 @@
 	                            var cell4 = row.insertCell(3);
 	                            var cell5 = row.insertCell(4);
 	                            var cell6 = row.insertCell(5);
-	                            console.log(snapshot.val()[tempKey])
+	                            var button = row.insertCell(6);
+	                            console.log(snapshot.val()[userKeys[x]])
 
-	                            cell1.innerHTML = snapshot.val()[tempKey]["name"]
-	                            cell2.innerHTML = snapshot.val()[tempKey]["category"]
-	                            cell3.innerHTML = snapshot.val()[tempKey]["location"]
-	                            cell4.innerHTML = snapshot.val()[tempKey]["service"];
-	                            cell5.innerHTML = snapshot.val()[tempKey]["lowestBid"]
-	                            cell6.innerHTML = snapshot.val()[tempKey]["description"]
+	                            cell1.innerHTML = snapshot.val()[userKeys[x]]["name"]
+	                            console.log(snapshot.val()[userKeys[x]]["name"]);
+	                            cell2.innerHTML = snapshot.val()[userKeys[x]]["category"]
+	                            cell3.innerHTML = snapshot.val()[userKeys[x]]["location"]
+	                            cell4.innerHTML = snapshot.val()[userKeys[x]]["service"];
+	                            cell5.innerHTML = snapshot.val()[userKeys[x]]["lowestBid"]
+	                            cell6.innerHTML = snapshot.val()[userKeys[x]]["description"]
 
-	                            button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[tempKey[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey[x]]["creatorId"] + '">';
+	                            button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[userKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[userKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[userKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[userKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[userKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[userKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[userKeys[x]]["creatorId"] + '"> <button id="details" value="upvote">Details</button></form>';
 	                        }
                         }
                     });
                 });
-
 
                 var workingKeys = [];
                 console.log(userId)
@@ -188,44 +109,43 @@
                     });
 
                     firebase.database().ref('/users/' + userId + '/worker').once('value').then(function(snapshot) {
-                        console.log(Object.keys(snapshot.val()))
-                        console.log(snapshot.val()[Object.keys(snapshot.val())])
+                        console.log(snapshot.numChildren())
                         for (var x=0; x < snapshot.numChildren(); x++){
-                        	console.log(snapshot.val()[Object.keys(snapshot.val())[x]]["done"])
-                        	if(snapshot.val()[Object.keys(snapshot.val())]["done"] == false){
-	                            var table = document.getElementById("hiredTable");
+                            var table = document.getElementById("hiredTable");
 
-	                            var row = table.insertRow(0);
-	                            var cell1 = row.insertCell(0);
-	                            var cell2 = row.insertCell(1);
-	                            var cell3 = row.insertCell(2);
-	                            var cell4 = row.insertCell(3);
-	                            var cell5 = row.insertCell(4);
-	                            var cell6 = row.insertCell(5);
-	                            var cell7 = row.insertCell(6);
-	                            var button = row.insertCell(7);
+                            var row = table.insertRow(0);
+                            var cell1 = row.insertCell(0);
+                            var cell2 = row.insertCell(1);
+                            var cell3 = row.insertCell(2);
+                            var cell4 = row.insertCell(3);
+                            var cell5 = row.insertCell(4);
+                            var cell6 = row.insertCell(5);
+                            var cell7 = row.insertCell(6);
+                            var button = row.insertCell(7);
 
-	                            cell1.innerHTML = snapshot.val()[workingKeys[x]]["name"]
-	                            cell2.innerHTML = snapshot.val()[workingKeys[x]]["category"]
-	                            cell3.innerHTML = snapshot.val()[workingKeys[x]]["location"]
-	                            cell4.innerHTML = snapshot.val()[workingKeys[x]]["service"];
-	                            cell5.innerHTML = snapshot.val()[workingKeys[x]]["lowestBid"]
-	                            cell6.innerHTML = snapshot.val()[workingKeys[x]]["description"]
-	                            cell7.innerHTML = snapshot.val()[workingKeys[x]]["creatorEmail"]
+                            cell1.innerHTML = snapshot.val()[workingKeys[x]]["name"]
+                            cell2.innerHTML = snapshot.val()[workingKeys[x]]["category"]
+                            cell3.innerHTML = snapshot.val()[workingKeys[x]]["location"]
+                            cell4.innerHTML = snapshot.val()[workingKeys[x]]["service"];
+                            cell5.innerHTML = snapshot.val()[workingKeys[x]]["lowestBid"]
+                            cell6.innerHTML = snapshot.val()[workingKeys[x]]["description"]
+                            cell7.innerHTML = snapshot.val()[workingKeys[x]]["creatorEmail"]
 
-	                            console.log(snapshot.val());
-	                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + workingKeys[x] + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[workingKeys[x]]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[workingKeys[x]]["creatorId"] + '"> <button class="tableButton" id="markDone' + x + '">Finished</button></form>';
-	                            
-	                            var tempKey = Object.keys(snapshot.val())[0]
-	                            var temp2Key = workingKeys[x]
-	                            console.log(workingKeys[x]);
+                            console.log(snapshot.val());
+                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + workingKeys[x] + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[workingKeys[x]]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[workingKeys[x]]["creatorId"] + '"> <button id="markDone ' + x + '">Finished</button></form>';
+                            
+                            var tempKey = Object.keys(snapshot.val())[0]
+                            console.log(workingKeys[x]);
 
-	                            document.getElementById('markDone' + x).addEventListener('click', function(){
-	                            	console.log(temp2Key)
-	                                var same = snapshot.val()[temp2Key]["creatorId"]
-	                                markDone(snapshot.val(), tempKey, userId, same);
-	                            });
-	                        }
+                            document.getElementById(markDone + x).addEventListener('click', function(){
+                                console.log(snapshot.val())
+                                console.log(tempKey)
+                                console.log(userId)
+                                console.log(workingKeys[x])
+                                console.log(snapshot.val()[workingKeys[x]]["creatorId"]);
+                                markDone(snapshot.val(), tempKey, userId, snapshot.val()[workingKeys[x]]["creatorId"]);
+                            });
+
                         }
                     });
                 });
@@ -276,6 +196,7 @@
             })
         });
 
+        userId = firebase.auth().currentUser.uid;
         firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
             var username = snapshot.val()["username"];
             document.getElementById("username").innerHTML = username
@@ -336,20 +257,16 @@
 
         function markDone(values, key, workerId, creatorId){
             console.log(values)
-            var same = values[key]
-            same['done'] = true
-            console.log(same)
+            values.push({done:true});
+            console.log(values)
 
             var updates = {};
             var updates1 = {};
             var updates2 = {};
 
-            updates['/projects/' + key] = same;
-            console.log('/users/' + workerId + '/' + key)
-            console.log('/users/' + creatorId + '/' + key)
-            console.log(same)
-            updates1['/users/' + workerId + '/worker/' + key] = same;
-            updates2['/users/' + creatorId + '/projects/' + key] = same;
+            updates['/projects/' + key] = values;
+            updates1['/users/' + workerId + key] = values;
+            updates2['/users/' + creatorId + key] = values;
 
             firebase.database().ref().update(updates);
             firebase.database().ref().update(updates1);
@@ -363,7 +280,3 @@
                 console.log(error);
             });
         }
-    </script>
-
-</body>
-</html>
