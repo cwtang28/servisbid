@@ -51,7 +51,7 @@ app.post('/projectDetails', function(req, res){
     var category = req.param('category');
     var location = req.param('location');
     var service = req.param('service');
-    var lowestBid = req.param('lowestBid');
+    var highestbid = req.param('highestbid');
     var description = req.param('description');
     var key = req.param('key');
     var id = req.param('creator');
@@ -61,7 +61,7 @@ app.post('/projectDetails', function(req, res){
     	category:category,
     	location:location,
     	service:service, 
-    	lowestBid:lowestBid, 
+    	highestbid:highestbid, 
     	description:description,
     	key:key,
     	creator:id
@@ -73,7 +73,7 @@ app.post('/yourProjectDetails', function(req,res){
     var category = req.param('category');
     var location = req.param('location');
     var service = req.param('service');
-    var lowestBid = req.param('lowestBid');
+    var highestbid = req.param('highestbid');
     var description = req.param('description');
     var key = req.param('key');
     var id = req.param('creator');
@@ -83,7 +83,7 @@ app.post('/yourProjectDetails', function(req,res){
     	category:category,
     	location:location,
     	service:service, 
-    	lowestBid:lowestBid, 
+    	highestbid:highestbid, 
     	description:description,
     	key:key,
     	creator:id

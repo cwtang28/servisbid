@@ -39,7 +39,7 @@
     </header>
     <h4> {{ service }} </h4>
     <p>{{ description }}</p>
-    <!-- <p> ${{ lowestBid }} </p> -->
+    <!-- <p> ${{ highestbid }} </p> -->
 
     <form> 
         <label> Bid? </label><br>
@@ -60,7 +60,7 @@
     var userLocation = "{{ location }}";
 
     var service = "{{ service }}";
-    var lowestBid = "{{ lowestBid }}";
+    var highestbid = "{{ highestbid }}";
     var description = "{{ description }}";
     var tempKey = "{{ key }}";
     var projKeyArray = tempKey.split(',');
@@ -137,7 +137,7 @@
 
 
     function submitBid(){
-        if(document.getElementById("newBid").value != "" && document.getElementById("newBid").value >= parseInt(lowestBid)){
+        if(document.getElementById("newBid").value != "" && document.getElementById("newBid").value <= parseInt(highestbid)){
             var postData = {
                 user:userId,
                 bid:document.getElementById("newBid").value,
@@ -160,7 +160,7 @@
             window.location = document.getElementById("done").href;
         } 
         else{
-            document.getElementById("error").value = "Please provide a valid value for new bid"
+            document.getElementById("error").value = "Please provide value less than minimum the new bid"
         }
     }
 </script>

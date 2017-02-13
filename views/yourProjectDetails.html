@@ -39,7 +39,7 @@
     </header>
     <h4> {{ service }} </h4>
     <p>{{ description }}</p>
-    <p> ${{ lowestBid }} </p>
+    <p> ${{ highestbid }} </p>
 
     <a style="display:none" href="/profile" id="done"></a>
 
@@ -53,7 +53,7 @@
     var userLocation = "{{ location }}";
 
     var service = "{{ service }}";
-    var lowestBid = "{{ lowestBid }}";
+    var highestbid = "{{ highestbid }}";
     var description = "{{ description }}";
     
     var tempKey = "{{ key }}";
@@ -164,7 +164,7 @@
             description:  description,
             category: category,
             location: userLocation,
-            lowestBid: lowestBid,
+            highestbid: highestbid,
             creatorId:creator,
             creatorEmail:creatorEmail,
             done:false

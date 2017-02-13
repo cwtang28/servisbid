@@ -124,10 +124,10 @@
                             cell2.innerHTML = snapshot.val()[userKeys[x]]["category"]
                             cell3.innerHTML = snapshot.val()[userKeys[x]]["location"]
                             cell4.innerHTML = snapshot.val()[userKeys[x]]["service"];
-                            cell5.innerHTML = snapshot.val()[userKeys[x]]["lowestBid"]
+                            cell5.innerHTML = snapshot.val()[userKeys[x]]["highestbid"]
                             cell6.innerHTML = snapshot.val()[userKeys[x]]["description"]
 
-                            button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[userKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[userKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[userKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[userKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[userKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[userKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[userKeys[x]]["creatorId"] + '"> <button id="details" value="upvote">Details</button></form>';
+                            button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[userKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[userKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[userKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[userKeys[x]]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[userKeys[x]]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[userKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[userKeys[x]]["creatorId"] + '"> <button id="details" value="upvote">Details</button></form>';
                         }
                     });
                 });
@@ -147,7 +147,6 @@
                         for (var x=0; x < snapshot.numChildren(); x++){
                         	tempKey = Object.keys(snapshot.val())[x]
                         	console.log(tempKey)
-							console.log(snapshot.val()[tempKey["done"]])
                         	if(snapshot.val()[tempKey]["done"] == true){
 	                            var table = document.getElementById("doneProjectsTable");
 
@@ -164,10 +163,9 @@
 	                            cell2.innerHTML = snapshot.val()[tempKey]["category"]
 	                            cell3.innerHTML = snapshot.val()[tempKey]["location"]
 	                            cell4.innerHTML = snapshot.val()[tempKey]["service"];
-	                            cell5.innerHTML = snapshot.val()[tempKey]["lowestBid"]
+	                            cell5.innerHTML = snapshot.val()[tempKey]["highestbid"]
 	                            cell6.innerHTML = snapshot.val()[tempKey]["description"]
 
-	                            button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[tempKey[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey[x]]["creatorId"] + '">';
 	                        }
                         }
                     });
@@ -188,11 +186,10 @@
                     });
 
                     firebase.database().ref('/users/' + userId + '/worker').once('value').then(function(snapshot) {
-                        console.log(Object.keys(snapshot.val()))
-                        console.log(snapshot.val()[Object.keys(snapshot.val())])
                         for (var x=0; x < snapshot.numChildren(); x++){
-                        	console.log(snapshot.val()[Object.keys(snapshot.val())[x]]["done"])
-                        	if(snapshot.val()[Object.keys(snapshot.val())]["done"] == false){
+							tempKey = Object.keys(snapshot.val())[x]
+
+                        	if(snapshot.val()[tempKey]["done"] == false){
 	                            var table = document.getElementById("hiredTable");
 
 	                            var row = table.insertRow(0);
@@ -205,16 +202,16 @@
 	                            var cell7 = row.insertCell(6);
 	                            var button = row.insertCell(7);
 
-	                            cell1.innerHTML = snapshot.val()[workingKeys[x]]["name"]
-	                            cell2.innerHTML = snapshot.val()[workingKeys[x]]["category"]
-	                            cell3.innerHTML = snapshot.val()[workingKeys[x]]["location"]
-	                            cell4.innerHTML = snapshot.val()[workingKeys[x]]["service"];
-	                            cell5.innerHTML = snapshot.val()[workingKeys[x]]["lowestBid"]
-	                            cell6.innerHTML = snapshot.val()[workingKeys[x]]["description"]
-	                            cell7.innerHTML = snapshot.val()[workingKeys[x]]["creatorEmail"]
+	                            cell1.innerHTML = snapshot.val()[tempKey]["name"]
+	                            cell2.innerHTML = snapshot.val()[tempKey]["category"]
+	                            cell3.innerHTML = snapshot.val()[tempKey]["location"]
+	                            cell4.innerHTML = snapshot.val()[tempKey]["service"];
+	                            cell5.innerHTML = snapshot.val()[tempKey]["highestbid"]
+	                            cell6.innerHTML = snapshot.val()[tempKey]["description"]
+	                            cell7.innerHTML = snapshot.val()[tempKey]["creatorEmail"]
 
 	                            console.log(snapshot.val());
-	                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[workingKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + workingKeys[x] + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[workingKeys[x]]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[workingKeys[x]]["creatorId"] + '"> <button class="tableButton" id="markDone' + x + '">Finished</button></form>';
+	                            button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[tempKey]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[tempKey]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey]["creatorId"] + '"> <button class="tableButton" id="markDone' + x + '">Finished</button></form>';
 	                            
 	                            var tempKey = Object.keys(snapshot.val())[0]
 	                            var temp2Key = workingKeys[x]
@@ -267,10 +264,10 @@
                         cell2.innerHTML = snapshot.val()[keys[x]]["category"]
                         cell3.innerHTML = snapshot.val()[keys[x]]["location"]
                         cell4.innerHTML = snapshot.val()[keys[x]]["service"];
-                        cell5.innerHTML = snapshot.val()[keys[x]]["lowestBid"]
+                        cell5.innerHTML = snapshot.val()[keys[x]]["highestbid"]
                         cell6.innerHTML = snapshot.val()[keys[x]]["description"]
 
-                        button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[keys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[keys[x]]["creatorId"] + '"> <button id="details" value="upvote">Details</button></form>';
+                        button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[keys[x]]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[keys[x]]["creatorId"] + '"> <button id="details" value="upvote">Details</button></form>';
                     }
                 }
             })
@@ -325,9 +322,9 @@
                             cell2.innerHTML = snapshot.val()[keys[x]]["category"]
                             cell3.innerHTML = snapshot.val()[keys[x]]["location"]
                             cell4.innerHTML = snapshot.val()[keys[x]]["service"];
-                            cell5.innerHTML = snapshot.val()[keys[x]]["lowestBid"]
+                            cell5.innerHTML = snapshot.val()[keys[x]]["highestbid"]
                             cell6.innerHTML = snapshot.val()[keys[x]]["description"]
-                            button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="lowestBid" class="register-input" value="'+ snapshot.val()[keys[x]]["lowestBid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[keys[x]]["creatorId"] + '"><button id="details" value="upvote">Details</button></form>';
+                            button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[keys[x]]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[keys[x]]["creatorId"] + '"><button id="details" value="upvote">Details</button></form>';
                         }
                     }
                 });
