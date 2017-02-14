@@ -24,6 +24,10 @@
         <input type="text" class="register-input" id="category" placeholder="Category"><br>    
         <input type="text" class="register-input" id="location" placeholder="location"><br>
         <input type="number" class="register-input" id="highestbid" placeholder="Max Bid"><br>
+        
+        <label> Deadline</label><br>
+        <input type="date" id="deadLine"><br>
+
         <p id="error"></p>
         <button type="button" onclick="create()" value="Create" class="register-button">Create</button>
     </form>
@@ -61,7 +65,6 @@
                 window.location = document.getElementById("notLoggedIn").href
             }
         });
-
         function create(){
             var postData = {
                 name:document.getElementById("name").value,
@@ -71,6 +74,7 @@
                 location: document.getElementById("location").value,
                 highestbid: document.getElementById("highestbid").value,
                 creatorId:userId,
+                deadline:document.getElementById("deadLine").value,
                 open:true
             };
 

@@ -10,14 +10,6 @@ app.set('view engine', 'html');
 app.set('views', __dirname+'/views');
 app.engine('html', engines.mustache);
 
-
-// var transporter = nodemailer.createTransport({
-    // service: 'Gmail',
-    // auth: {
-    // }
-// });
-
-
 app.get('/', function (req, res) {
 	res.render('index.html');
 });
@@ -55,6 +47,7 @@ app.post('/projectDetails', function(req, res){
     var description = req.param('description');
     var key = req.param('key');
     var id = req.param('creator');
+    var date = req.param('deadline');
 
     res.render('projectDetails.html', { 
     	user:user, 
@@ -64,7 +57,8 @@ app.post('/projectDetails', function(req, res){
     	highestbid:highestbid, 
     	description:description,
     	key:key,
-    	creator:id
+    	creator:id,
+        deadline: date
     });
 });
 
@@ -77,7 +71,8 @@ app.post('/yourProjectDetails', function(req,res){
     var description = req.param('description');
     var key = req.param('key');
     var id = req.param('creator');
-
+    var date = req.param('date')
+    console.log(date)
     res.render('yourProjectDetails.html', { 
     	user:user, 
     	category:category,
@@ -86,7 +81,8 @@ app.post('/yourProjectDetails', function(req,res){
     	highestbid:highestbid, 
     	description:description,
     	key:key,
-    	creator:id
+    	creator:id,
+        deadline:date
     });
 });
 
@@ -98,13 +94,6 @@ app.post('/doneWithProject', function(req,res){
     var service = req.param('service');
     res.redirect('/profile')
 })
-
-
-// app.use(function(req, res, next) {
-//   	var err = new Error('Not Found');
-//   	err.status = 404;
-//   	next(err);
-// });
 
 app.listen(8000);
 console.log('running on 8000 hopefully');

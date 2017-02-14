@@ -39,7 +39,7 @@
     </header>
     <h4> {{ service }} </h4>
     <p>{{ description }}</p>
-    <!-- <p> ${{ highestbid }} </p> -->
+    <p> Ends at {{ deadline }}</p>
 
     <form> 
         <label> Bid? </label><br>
@@ -66,7 +66,7 @@
     var projKeyArray = tempKey.split(',');
     var projKey = projKeyArray[0];
     var creator = "{{ creator }}";
-
+    console.log("{{ deadline }}")
     var config = {
         apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
         authDomain: "yodelbackend.firebaseapp.com",
