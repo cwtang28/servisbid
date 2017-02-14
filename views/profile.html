@@ -113,7 +113,7 @@
 							if(tempDate.getMonth() <= mm || (tempDate.getDate() <= dd && tempDate.getMonth() == mm)){
 
 								var updates = {};
-								updates['/projects/' + projectKeys[x] + 'open'] = false;
+								updates['/projects/' + projectKeys[x] + '/open'] = false;
 								firebase.database().ref().update(updates);
         					}
     					}
