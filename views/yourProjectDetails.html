@@ -189,6 +189,13 @@
         firebase.database().ref().update(updates);
         firebase.database().ref().update(updates2);
         firebase.database().ref().update(updates3);
+
+        var empty = {};
+
+        for (var x=0; x<=keys.count - 1; x++){
+            var updates={};
+            updates['/users/' + keys[x] + '/myBids/' + projKey] = empty
+        }
     }
 
 </script>

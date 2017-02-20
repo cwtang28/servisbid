@@ -47,11 +47,13 @@
         <label> Comments </label><br>
         <textarea id="comments" rows="4" cols="50"></textarea><br>
         <button id="submitBidButton" onclick="submitBid()">Submit</button>
-        <p id="error"></p>
     </form>
-    <a style="display:none" href="/profile" id="done"></a>
+
+    <a style="display:none" id="done"></a>
     <label> currentBids </label>
     <table id="bidsTable" border="1"><tr> <td>name</td> <td> value </td> </table>
+
+    <p id="error"></p>
 </body>
 
 <script>
@@ -66,6 +68,7 @@
     var projKeyArray = tempKey.split(',');
     var projKey = projKeyArray[0];
     var creator = "{{ creator }}";
+    var deadline = {{ deadline }};
     console.log("{{ deadline }}")
     var config = {
         apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
@@ -111,9 +114,6 @@
                 firebase.database().ref('users/' + snapshot.val()[keys[x]]["user"] + '/username').once('value').then(function(snapshot2){
                     var username = snapshot2.val();
                     names.push(username);
-                    // console.log("got here")
-                    // console.log(names.length)
-                    // setTimeout(cell1.innerHTML = username, 500);
                 })
             }
 
@@ -137,7 +137,7 @@
 
 
     function submitBid(){
-        if(document.getElementById("newBid").value != "" && document.getElementById("newBid").value <= parseInt(highestbid)){
+        if(document.getElementById("newBid").value != "" && parseInt(document.getElementById("newBid").value) <= parseInt(highestbid)){
             var postData = {
                 user:userId,
                 bid:document.getElementById("newBid").value,
@@ -147,20 +147,31 @@
             var postKey = firebase.database().ref().child('projects').child(projKey).child('bids').push().key;
 
             var updates = {};
+
             updates['/projects/' + projKey + '/bids/' + postKey] = postData;
             firebase.database().ref().update(updates);
-            
-            // var postKey2 = firebase.database().ref().child('users').child(projKey).child('bids').push().key;
 
-            // var updates = {};
-            // updates['/projects/' + projKey + '/bids/' + postKey] = postData;
-            // firebase.database().ref().update(updates);
-            // window.location = document.getElementById("done").href
+            var postData2 = {
+                name:name,
+                deadline: deadline,
+                category: category,
+                location: userLocation,
+                service:service,
+                description:description,
+                bid:document.getElementById("newBid").value,
+                highestbid:highestbid,
+                comments:document.getElementById("comments").value
+            }
+
+            var updates2 = {}
+            updates2['/users/' + userId + '/myBids/' + projKey] = postData2;
+            firebase.database().ref().update(updates2)
 
             window.location = document.getElementById("done").href;
         } 
         else{
-            document.getElementById("error").value = "Please provide value less than minimum the new bid"
+            alert("Please provide a value less than the max bid");
+            // document.getElementById("error").value = "Please provide value less than minimum the new bid"
         }
     }
 </script>
