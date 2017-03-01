@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]> <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]> <html class="lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<!doctype html>
+
+<html lang="en">
 <head>
+	<meta charset="utf-8">
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Profile</title>
@@ -12,11 +11,132 @@
 	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/docs.min.css" rel="stylesheet">
+
+    <script src="js/jquery.min.js"></script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+
 </head>
 
-<style>
-	table{
+<body>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+
+
+ 
+            <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642;">
+              <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
+      <!--         <hr> -->
+        
+            </div>
+
+            <div class="clearfix" style="background-color:#142642"><!-- </br> &nbsp; --></div>
+     <!--        <hr> -->
+            <!-- menu profile quick info -->
+            <!-- /menu profile quick info -->
+
+             <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section" style = "font-size:16px">
+                <ul class="nav side-menu">
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/myprojects">My Projects</a></li>
+                  <li><a href="/pending">Pending Bids</a></li>
+                  <li><a href="/accepted">Accepted Bids</a></li>
+                  <li><a href="/completed">Completed</a></li>
+                  <li><a href="/" style = "">Logout</a></li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu" style = "height:57px">
+  <!--           <nav> -->
+                <a id="menu_toggle"><i class="fa fa-bars fa_custom fa-2x" style = "padding:15px"></i></a>
+                <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href = "/profile" class="user-profile dropdown-toggle" style = "height:57px">
+                   <!--  <img src="images/img.jpg" alt=""> --><label id="username" style = "text-align: center !important; margin-right:20px;"></label>
+                  </a>
+                <br>
+          </div>
+
+        </div>
+
+
+        <div class="right_col" role="main">
+
+        	<div class="">
+			<!-- 	<center> -->
+					<div class = "row" style="margin-left: 2px">
+<!-- 						<form class="search">
+							<input type="text" class="register-input" id="searchProject" placeholder="Search">
+							<select id="searchType">
+								<option value="name">Name</option>
+								<option value="category" selected>Category</option>
+								<option value="location">Location</option>
+							</select>
+							<p id="error"></p>
+							<button type="button" onclick="searchProjects()" value="search" class="register-button">Search</button>
+							<option></option>
+						</form>
+
+ -->
+
+
+<!-- 
+ 							<label id="username" style = "text-align: center !important"></label></br>
+							<label> My Projects</label><br>
+							<table id="yourTable" border="1"></table>
+							<br><br> -->
+
+						
+							<button><a href="/createProject"> New Project</a></button>
+							<br><br>
+
+							<form class="search">
+								<input type="text" class="register-input" id="searchProject" placeholder="search">
+								<select id="searchType">
+									<option value="name">Name</option>
+									<option value="category" selected>Category</option>
+									<option value="location">Location</option>
+								</select>
+								<p id="error"></p>
+								<button type="button" onclick="searchProjects()" value="search" class="register-button">search</button>
+								<option></option>
+							</form>
+
+					</div>
+												 <label> Projects </label><br>
+												   <style type="text/css">
+    .tableag > th, td {
+      padding:15px;
+    }
+    	table{
 		border-collapse: collapse;
 		width:100%;
 		table-layout: fixed;
@@ -32,54 +152,39 @@
 	.tableButton{
 		width:100%;
 	}
-</style>
+  </style>
+							  <table id="projectsTable" border="1">
+							  </table>
+					<div class="row" >
+			            <div class="col-lg-4" style="text-align: right">
+<!-- 		            		<p style = "font-size:24px; margin-bottom:0px;">Result</p>
+		            		<p style = "margin-left:20px; font-size:18px">Click to select</p> -->
+			            </div>
+			            <div class="col-lg-8" style="">
+<!-- 							<table id="resultsTable" style="border: 0px solid black; font-size:18px; width:400px">
+							</table> -->
 
-<body>
-	<label id="username"></label><br>
-	<button><a href="/createProject"> New Project</a></button>
+							<br><br>
+						</div>
+					</div>
+			<!-- 	</center> -->
+		    	</div>
+		    </div>
+      </div>
+    </div>
+
+
 	<br><br>
-
-	<label> My Projects</label><br>
-	<table id="yourTable" border="1"></table>
-	<br><br>
-
-	<label> Pending Bids </label> <br>
-	<table id="pendingTable" border="1"> </table>
-	<br><br>
-
-	<label> Accepted Bids </label> <br>
-	<table id="hiredTable" border="1">
-	</table>
-	<br><br>
-
-	<form class="search">
-		<input type="text" class="register-input" id="searchProject" placeholder="search">
-		<select id="searchType">
-			<option value="name">Name</option>
-			<option value="category" selected>Category</option>
-			<option value="location">Location</option>
-		</select>
-		<p id="error"></p>
-		<button type="button" onclick="searchProjects()" value="search" class="register-button">search</button>
-		<option></option>
-	</form>
-
-	<label> My Completed Work</label><br>
-	<table id="doneProjectsTable" border="1">
-	</table>
-	<br><br>
-
-	<label> Projects </label><br>
-	<table id="projectsTable" border="1">
-	</table>
-	<br><br>
-
-	<button onclick="logout()">Logout </button>
-	<a href="/login" id="notLoggedIn" style="display:none"> </a>
-	<a href="/" id="logout" style="display:none"> </a>
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../vendors/skycons/skycons.js"></script>
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <script src="../build/js/custom.min.js"></script>
+</body>
 
 	<script>
-
 		var config = {
 			apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
 			authDomain: "yodelbackend.firebaseapp.com",
@@ -87,6 +192,7 @@
 			storageBucket: "yodelbackend.appspot.com",
 			messagingSenderId: "609174959546"
 		};
+
 		firebase.initializeApp(config);
 
 		var userId = "";
@@ -231,12 +337,6 @@
 							var row = table.insertRow(0);
 							var cell1 = row.insertCell(0);
 							var cell2 = row.insertCell(1);
-							var cell3 = row.insertCell(2);
-							var cell4 = row.insertCell(3);
-							var cell5 = row.insertCell(4);
-							var cell6 = row.insertCell(5);
-							var cell7 = row.insertCell(6);
-							var button = row.insertCell(7);
 
 							console.log(snapshot.val()[tempKey])
 
@@ -362,9 +462,6 @@ query.once("value")
             // document.getElementById("username").innerHTML = username
         // });
 
-
-
-
         function searchProjects(){
         	var keys = [];
         	var searchType = document.getElementById("searchType").value
@@ -373,7 +470,6 @@ query.once("value")
         	while(table.rows.length > 0) {
         		table.deleteRow(0);
         	}   
-
 
         	var query = firebase.database().ref("projects").orderByKey();
         	query.once("value")
@@ -443,6 +539,4 @@ query.once("value")
         	});
         }
     </script>
-
-</body>
 </html>

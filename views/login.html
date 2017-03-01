@@ -11,19 +11,82 @@
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+    <link href="../main.css" rel="stylesheet">
+  
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
+
+
+
 </head>
+<style>
 
-<body style="overflow-x: hidden; overflow-y: hidden;">
-    <h1 class="login-title">Login</h1>
-    <form class="login">
-        <input type="email" class="register-input" id="email" placeholder="Email address">
-        <input type="password" class="register-input" id="password" placeholder="Password">
-        <p id="error"></p>
-        <button type="button" onclick="login()">Sign In</button>
-        <p style = "margin-top:20px;">Don't have an account? <a href = "/register">Sign Up!</a></p>
-    </form>
-    <a href="/profile" id="link" style="display:none"> </a>
+</style>
 
+<body style="overflow-x: hidden; overflow-y: hidden; background-color: #d5dce8"><!--overflow-x: hidden; overflow-y: hidden;-->
+
+    <center>
+<!--         <h1 class="register-title" style = "margin-top: 20px">Login</h1> -->
+            <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642; padding-top:25px; height: 70px;">
+              <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important;">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
+      <!--         <hr> -->
+        
+            </div>
+            <div style = "padding-bottom:40px"></div>
+ 
+
+        <div class="container" style = "">
+
+        <style>
+        .selected {
+            border-top:1px solid #b8c3d6;
+            border-left:1px solid #b8c3d6;
+            border-bottom: 1px solid #FFFFFF
+        }
+        </style>
+
+        <center>
+        <table style="width:402px" id="tableID">
+            <tbody>
+                <tr style = "text-align: center; font-size:15px">
+                    <td class = "selected" style = "background-color:#FFFFFF;padding-bottom:20px; padding-top:20px">SIGN IN</td>
+                    <td style = "background-color:#e3e5e8; border:1px solid #b8c3d6;" onclick="location.href='/register'">SIGN UP</td>
+               <!--      <td>  -->
+                </tr>
+            </tbody>
+        </table>
+        </center>
+
+        <table style="width:100%;">
+            <tbody>
+                <tr style = "text-align: center; font-size:15px; background-color: #FFFFFF">
+                    <td style = "border-left:1px solid #b8c3d6; border-right:1px solid #b8c3d6; border-bottom:1px solid #b8c3d6">
+                    <form class="login" style = "padding-top:50px; padding: 50px">
+                        <div class="register-label">Email</div>
+                        <div class="login-box-field">
+                        <input type="email" class="register-input" id="email">
+
+                        <div class="register-label"> Password </div>
+                        <div class="login-box-field">
+                        <input type="password" class="register-input" id="password">
+                        
+                        <p id="error"></p>
+                        <button class="btn" type="button" onclick="login()">Login</button>
+                        <div style="margin-top:30px">
+<!--                             <a href = "/register"> Create New Account</a></p> -->
+                        </div>
+                    </form>
+            <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false"></div>
+            <a href="/profile" id="link" style="display:none"> </a>
+        </div></td>
+                </tr>
+            </tbody>
+        </table>
+
+            <div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="false"></div>
+            <a href="/profile" id="link" style="display:none"> </a>
+        </div>
+    </center>
     <script>
         var config = {
             apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",

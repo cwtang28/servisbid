@@ -9,6 +9,9 @@ app.use(express.static(__dirname));
 app.set('view engine', 'html');
 app.set('views', __dirname+'/views');
 app.engine('html', engines.mustache);
+app.use(express.static(__dirname + '/public'));
+
+
 
 app.get('/', function (req, res) {
 	res.render('index.html');
@@ -37,6 +40,26 @@ app.get('/projectDetails', function(req,res){
 app.get('/yourProjectDetails', function(req,res){
 	res.render('/profile.html')
 })
+
+app.get('/myprojects', function (req, res) {
+    res.render('myprojects.html');
+});
+
+app.get('/pending', function (req, res) {
+    res.render('pending.html');
+});
+
+app.get('/accepted', function (req, res) {
+    res.render('accepted.html');
+});
+
+app.get('/completed', function (req, res) {
+    res.render('completed.html');
+});
+
+app.get('/logout', function(req,res){
+    res.render('index.html')
+});
 
 app.post('/projectDetails', function(req, res){
     var user = req.param('name');

@@ -1,0 +1,515 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  	<meta charset="utf-8">
+  	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  	<title>Projects</title>
+  	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+  	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/docs.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+
+
+            <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642;">
+              <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
+      <!--         <hr> -->
+        
+            </div>
+
+            <div class="clearfix" style="background-color:#142642"><!-- </br> &nbsp; --></div>
+
+            <!-- menu profile quick info -->
+            <!-- /menu profile quick info -->
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section" style = "font-size:16px">
+                <ul class="nav side-menu">
+                  <li><a href="/profile">Profile</a></li>
+                  <li><a href="/myprojects">My Projects</a></li>
+                  <li><a href="/pending">Pending Bids</a></li>
+                  <li><a href="/accepted">Accepted Bids</a></li>
+                  <li><a href="/completed">Completed</a></li>
+                  <li><a href="/" style = "">Logout</a></li>
+                </ul>
+              </div>
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <!-- /menu footer buttons -->
+
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu" style = "height:57px">
+  <!--           <nav> -->
+                <a id="menu_toggle"><i class="fa fa-bars fa_custom fa-2x" style = "padding:15px"></i></a>
+                <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                  <a href = "/profile" class="user-profile dropdown-toggle" style = "height:57px">
+                   <!--  <img src="images/img.jpg" alt=""> --><label id="username" style = "text-align: center !important; margin-right:20px;"></label>
+                  </a>
+                <br>
+          </div>
+
+        </div>
+
+        <div class="right_col" role="main">
+          <div class=""> <!-- <label> My Completed Work</label><br>
+
+           -->
+
+  <style>
+    .tableag > th, td {
+      padding:15px;
+    }
+  </style>
+<!--   <table id="doneProjectsTable" class = "tableag" border="1" style = "">
+  </table>
+  <br><br>
+ -->
+
+
+                         <label> Projects </label><br>
+                           <style type="text/css">
+    .tableag > th, td {
+      padding:15px;
+    }
+      table{
+    border-collapse: collapse;
+    width:100%;
+    table-layout: fixed;
+  }
+
+  table td {
+    width: 20%;
+  }
+  button#details{
+    width:100%;
+  }
+
+  .tableButton{
+    width:100%;
+  }
+  </style>
+                <table id="projectsTable" border="1">
+                </table>
+      <br><br>
+
+
+
+               <form class="search">
+              <input type="text" class="register-input" id="searchProject" placeholder="Search">
+              <select id="searchType">
+                <option value="name">Name</option>
+                <option value="category" selected>Category</option>
+                <option value="location">Location</option>
+              </select>
+              <p id="error"></p>
+              <button type="button" onclick="searchProjects()" value="search" class="register-button">Search</button>
+              <option></option>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="../vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../vendors/skycons/skycons.js"></script>
+    <script src="../vendors/DateJS/build/date.js"></script>
+    <script src="../build/js/custom.min.js"></script>
+
+</body>
+<script>
+
+
+
+    var config = {
+      apiKey: "AIzaSyBljIAXQPP9f9FJ9LTHuVlZJZkpajvmZj4",
+      authDomain: "yodelbackend.firebaseapp.com",
+      databaseURL: "https://yodelbackend.firebaseio.com",
+      storageBucket: "yodelbackend.appspot.com",
+      messagingSenderId: "609174959546"
+    };
+
+    firebase.initializeApp(config);
+
+    var userId = "";
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        var today = new Date();
+        console.log(today)
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+
+        var projectKeys = [];
+        var query3 = firebase.database().ref("projects/").orderByKey();
+        query.once("value")
+        .then(function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            var key = childSnapshot.key;
+            console.log(key)
+            projectKeys.push(key)
+          })
+          firebase.database().ref('/projects').once('value').then(function(snapshot) {
+            for(var x = 0; x < snapshot.numChildren(); x++){
+              var tempDate = new Date(snapshot.val()[projectKeys[x]]["deadline"]);
+              console.log(tempDate)
+              console.log(tempDate.getMonth())
+              console.log(tempDate.getDate())
+              if(tempDate.getMonth() <= mm || (tempDate.getDate() <= dd && tempDate.getMonth() == mm)){
+
+                var updates = {};
+                updates['/projects/' + projectKeys[x] + '/open'] = false;
+                firebase.database().ref().update(updates);
+                  }
+              }
+          });
+        })
+
+
+
+        userId = firebase.auth().currentUser.uid;
+        console.log(userId)
+        firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+          var username = snapshot.val()["username"];
+                    // console.log(username)
+                    // console.log(snapshot.val())
+                    document.getElementById("username").innerHTML = snapshot.val()["username"]
+                });
+
+
+        var userKeys = [];
+        var query2 = firebase.database().ref("users/" + userId + '/projects').orderByKey();
+        query2.once("value")
+        .then(function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            console.log(key)
+            userKeys.push(key);
+          });
+
+          firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
+
+            for (var x=0; x < snapshot.numChildren(); x++){
+              var table = document.getElementById("yourTable");
+
+              var row = table.insertRow(0);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+              var cell6 = row.insertCell(5);
+              var cell7 = row.insertCell(6);
+              var button = row.insertCell(7);
+
+              cell1.innerHTML = snapshot.val()[userKeys[x]]["name"]
+              cell2.innerHTML = snapshot.val()[userKeys[x]]["category"]
+              cell3.innerHTML = snapshot.val()[userKeys[x]]["location"]
+              cell4.innerHTML = snapshot.val()[userKeys[x]]["service"];
+              cell5.innerHTML = snapshot.val()[userKeys[x]]["highestbid"]
+              cell6.innerHTML = snapshot.val()[userKeys[x]]["description"]
+              cell7.innerHTML = snapshot.val()[userKeys[x]]["deadline"]
+
+              button.innerHTML = '<form action="/yourProjectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[userKeys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[userKeys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[userKeys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[userKeys[x]]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[userKeys[x]]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[userKeys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + userKeys[x] + '"> <input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[userKeys[x]]["creatorId"] + '"> <input type="text" style="display:none" name="date" class="register-input" value="' + snapshot.val()[userKeys[x]]["deadline"] + '"><button id="details" value="upvote">Details</button></form>';
+            }
+          });
+        });
+
+        var tempKeys = [];
+        console.log(userId)
+        var query3 = firebase.database().ref("/users/" + userId + '/worker').orderByKey();
+        query2.once("value")
+        .then(function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            console.log(key)
+            tempKeys.push(key);
+          });
+
+          firebase.database().ref('/users/' + userId + '/worker').once('value').then(function(snapshot) {
+            for (var x=0; x < snapshot.numChildren(); x++){
+              tempKey = Object.keys(snapshot.val())[x]
+              console.log(tempKey)
+              if(snapshot.val()[tempKey]["done"] == true){
+                var table = document.getElementById("doneProjectsTable");
+
+                var row = table.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
+                console.log(snapshot.val()[tempKey])
+
+                cell1.innerHTML = snapshot.val()[tempKey]["name"]
+                cell2.innerHTML = snapshot.val()[tempKey]["category"]
+                cell3.innerHTML = snapshot.val()[tempKey]["location"]
+                cell4.innerHTML = snapshot.val()[tempKey]["service"];
+                cell5.innerHTML = snapshot.val()[tempKey]["highestbid"]
+                cell6.innerHTML = snapshot.val()[tempKey]["description"]
+              }
+            }
+          });
+        });
+
+        var projKeys = [];
+        console.log(userId)
+        var query3 = firebase.database().ref("/users/" + userId + '/myBids').orderByKey();
+        query2.once("value")
+        .then(function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            console.log(key)
+            projKeys.push(key);
+          });
+
+          firebase.database().ref('/users/' + userId + '/myBids').once('value').then(function(snapshot) {
+            for (var x=0; x < snapshot.numChildren(); x++){
+              tempKey = Object.keys(snapshot.val())[x]
+              var table = document.getElementById("pendingTable");
+
+              var row = table.insertRow(0);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+
+              console.log(snapshot.val()[tempKey])
+
+              cell1.innerHTML = snapshot.val()[tempKey]["name"]
+              cell2.innerHTML = snapshot.val()[tempKey]["category"]
+              cell3.innerHTML = snapshot.val()[tempKey]["location"]
+              cell4.innerHTML = snapshot.val()[tempKey]["service"];
+              cell5.innerHTML = snapshot.val()[tempKey]["description"]
+                  cell6.innerHTML = snapshot.val()[tempKey]["bid"]
+                  cell7.innerHTML = snapshot.val()[tempKey]["comments"]
+
+              button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[tempKey]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey]["creatorId"] + '"> <input type="text" style="display:none" name="deadline" class="register-input" value = "' + snapshot.val()[tempKey]["deadline"] + '"> <button id="details" value="upvote">Details</button></form>';
+            }
+          });
+        });
+
+
+        var workingKeys = [];
+        console.log(userId)
+
+        var query2 = firebase.database().ref("/users/" + userId + '/worker').orderByKey();
+        query2.once("value")
+        .then(function(snapshot) {
+          console.log(snapshot.numChildren())
+          snapshot.forEach(function(childSnapshot) {
+            var key = childSnapshot.key;
+            console.log(key)
+            workingKeys.push(key);
+          });
+
+          firebase.database().ref('/users/' + userId + '/worker').once('value').then(function(snapshot) {
+            for (var x=0; x < snapshot.numChildren(); x++){
+              tempKey = Object.keys(snapshot.val())[x]
+
+              if(snapshot.val()[tempKey]["done"] == false){
+                var table = document.getElementById("hiredTable");
+
+                var row = table.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
+                var cell7 = row.insertCell(6);
+                var button = row.insertCell(7);
+
+                cell1.innerHTML = snapshot.val()[tempKey]["name"]
+                cell2.innerHTML = snapshot.val()[tempKey]["category"]
+                cell3.innerHTML = snapshot.val()[tempKey]["location"]
+                cell4.innerHTML = snapshot.val()[tempKey]["service"];
+                cell5.innerHTML = snapshot.val()[tempKey]["highestbid"]
+                cell6.innerHTML = snapshot.val()[tempKey]["description"]
+                cell7.innerHTML = snapshot.val()[tempKey]["creatorEmail"]
+
+                console.log(snapshot.val());
+                button.innerHTML = '<form action="/doneWithProject" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[tempKey]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"> <input type="text" style="display:none" name="makeEmail" class="register-input" value=" ' + snapshot.val()[tempKey]["creatorEmail"] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey]["creatorId"] + '"> <button class="tableButton" id="markDone' + x + '">Finished</button></form>';
+
+                var tempKey = Object.keys(snapshot.val())[0]
+                var temp2Key = workingKeys[x]
+                console.log(workingKeys[x]);
+
+                document.getElementById('markDone' + x).addEventListener('click', function(){
+                  console.log(temp2Key)
+                  var same = snapshot.val()[temp2Key]["creatorId"]
+                  markDone(snapshot.val(), tempKey, userId, same);
+                });
+              }
+            }
+          });
+        });
+      } 
+      else {
+        window.location = document.getElementById("notLoggedIn").href
+      }
+    });
+
+
+
+var keys = [];
+var searchType = document.getElementById("searchType").value
+
+var query = firebase.database().ref("projects").orderByKey();
+query.once("value")
+.then(function(snapshot) {
+  snapshot.forEach(function(childSnapshot) {
+    var key = childSnapshot.key;
+    console.log(key)
+    keys.push(key);
+  });
+
+  firebase.database().ref('/projects').once('value').then(function(snapshot) {
+    for (var x=0; x < snapshot.numChildren(); x++){
+      // if(snapshot.val()[keys[x]]["open"] == true){
+        var table = document.getElementById("projectsTable");
+
+        var row = table.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var button = row.insertCell(7);
+
+        cell1.innerHTML = snapshot.val()[keys[x]]["name"]
+        cell2.innerHTML = snapshot.val()[keys[x]]["category"]
+        cell3.innerHTML = snapshot.val()[keys[x]]["location"]
+        cell4.innerHTML = snapshot.val()[keys[x]]["service"];
+        cell5.innerHTML = snapshot.val()[keys[x]]["highestbid"]
+        cell6.innerHTML = snapshot.val()[keys[x]]["description"]
+        cell7.innerHTML = snapshot.val()[keys[x]]["deadline"]
+
+        button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[keys[x]]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[keys[x]]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[keys[x]]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[keys[x]]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[keys[x]]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[keys[x]]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + keys[x] + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[keys[x]]["creatorId"] + '"> <input type="text" style="display:none" name="deadline" class="register-input" value = "' + snapshot.val()[keys[x]]["deadline"] + '"> <button id="details" value="upvote">Details</button></form>';
+      // }
+    }
+  })
+});
+
+        // firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+            // var username = snapshot.val()["username"];
+            // document.getElementById("username").innerHTML = username
+        // });
+
+
+
+
+        function searchProjects(){
+          var keys = [];
+          var searchType = document.getElementById("searchType").value
+          var table = document.getElementById('projectsTable');
+
+          while(table.rows.length > 0) {
+            table.deleteRow(0);
+          }   
+
+
+          var query = firebase.database().ref("projects").orderByKey();
+          query.once("value")
+          .then(function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+              var key = childSnapshot.key;
+              console.log(key)
+              keys.push(key);
+            });
+
+            firebase.database().ref('/projects').once('value').then(function(snapshot) {
+              for (var x=0; x < snapshot.numChildren(); x++){
+                console.log(snapshot.val()[keys[x]]);
+
+                if(snapshot.val()[keys[x]][searchType] == document.getElementById("searchProject").value)  {
+
+                  var table = document.getElementById("projectsTable");
+
+                  var row = table.insertRow(0);
+
+                  var cell1 = row.insertCell(0);
+                  var cell2 = row.insertCell(1);
+                  var cell3 = row.insertCell(2);
+                  var cell4 = row.insertCell(3);
+                  var cell5 = row.insertCell(4);
+                  var cell6 = row.insertCell(5);
+
+                  cell1.innerHTML = snapshot.val()[keys[x]]["name"]
+                  cell2.innerHTML = snapshot.val()[keys[x]]["category"]
+                  cell3.innerHTML = snapshot.val()[keys[x]]["location"]
+                  cell4.innerHTML = snapshot.val()[keys[x]]["service"];
+                  cell5.innerHTML = snapshot.val()[keys[x]]["description"]
+                  cell6.innerHTML = snapshot.val()[keys[x]]["deadline"]
+                }
+              }
+            });
+          });
+        }
+
+        function markDone(values, key, workerId, creatorId){
+          console.log(values)
+          var same = values[key]
+          same['done'] = true
+          console.log(same)
+
+          var updates = {};
+          var updates1 = {};
+          var updates2 = {};
+
+          updates['/projects/' + key] = same;
+          console.log('/users/' + workerId + '/' + key)
+          console.log('/users/' + creatorId + '/' + key)
+          console.log(same)
+          updates1['/users/' + workerId + '/worker/' + key] = same;
+          updates2['/users/' + creatorId + '/projects/' + key] = same;
+
+          firebase.database().ref().update(updates);
+          firebase.database().ref().update(updates1);
+          firebase.database().ref().update(updates2);
+        }
+
+        function logout(){
+          firebase.auth().signOut().then(function() {
+            window.location = document.getElementById("logout").href
+          }, function(error) {
+            console.log(error);
+          });
+        }
+    </script>
+
+</html>
