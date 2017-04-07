@@ -36,7 +36,7 @@
             <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642;">
               <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
       <!--         <hr> -->
-        
+
             </div>
 
             <div class="clearfix" style="background-color:#142642"><!-- </br> &nbsp; --></div>
@@ -44,7 +44,7 @@
             <!-- menu profile quick info -->
 <!--             <div class="profile clearfix">
               <div class="profile_pic">
-      
+
               </div>
               <div class="profile_info">
               </div>
@@ -87,7 +87,21 @@
 
         <div class="right_col" role="main">
           <div class="">
-            <!--stuff-->
+            <form class="login">
+              <label id="username"></label><br>
+              <input type="text" class="register-input" id="name" placeholder="Name"><br>
+              <input type="text" class="register-input" id="service" placeholder="Service Required"><br>
+              <textarea rows="5" cols="80" placeholder="Description" id="description"></textarea><br>
+              <input type="text" class="register-input" id="category" placeholder="Category"><br>
+              <input type="text" class="register-input" id="location" placeholder="location"><br>
+              <input type="number" class="register-input" id="highestbid" placeholder="Max Bid"><br>
+              <label> Deadline</label><br>
+              <input type="date" id="deadLine"><br>
+              <p id="error"></p>
+              <button type="button" onclick="create()" value="Create" class="register-button">Create</button>
+            </form>
+            <a style="display:none" href="/profile" id="link"></a>
+            <a style="display:none" href="/login" id="notLoggedIn"></a>
           </div>
         </div>
       </div>
@@ -156,14 +170,14 @@
 
             var updates2 = {};
             updates2['/users/'  + userId + '/projects/' + postKey] = postData;
-            
+
             firebase.database().ref().update(updates2);
 
-            window.location = document.getElementById("link").href 
+            window.location = document.getElementById("link").href
         }
 
     </script>
 
 </body>
-    
+
 </html>
