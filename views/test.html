@@ -18,7 +18,8 @@
 	</head>
 
 <body>
-		<div class="container">
+	<nav id="tf-menu" class="navbar navbar-default navbar-fixed-top">
+		<!-- <div class="container"> -->
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 					<span class="sr-only">Toggle navigation</span>
@@ -26,80 +27,41 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-
+				<div class="navbar-brand" href="#">Yodel</div>
 			</div>
 
 			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-          <li><a href="/register" class="scroll">Register</a></li>
-					<li><a href="/login" class="scroll">Profile</a></li>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav search">
+					<li>
+						<form class="search">
+							<span>
+								<input type="text" class="search rounded" id="searchProject" placeholder="Search">
+							</span>
+						</form>
+					</li>
 				</ul>
-			</div><!-- /.navbar-collapse -->
-		</div><!-- /.container-fluid -->
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/register" class="scroll">Projects</a></li>
+					<li><a href="/register" class="scroll">Bids</a></li>
+          <li><a href="/register" class="scroll">Profile</a></li>
+					<li><a href="/login" class="scroll">Logout</a></li>
+				</ul>
+			</div>
+		<!-- </div> -->
 	</nav>
 
 
-	<div id="tf-home">
+	<div id="tf-dash">
 		<div class="overlay">
-			<div class="container">
-				<button><a href="/createProject"> New Project</a></button>
-				<form class="search">
-					<input type="text" class="register-input" id="searchProject" placeholder="search">
-					<select id="searchType">
-						<option value="name">Name</option>
-						<option value="category" selected>Category</option>
-						<option value="location">Location</option>
-					</select>
-					<p id="error"></p>
-					<button type="button" onclick="searchProjects()" value="search" class="register-button">search</button>
-					<option></option>
-				</form>
-			</div>
-			<div class="container">
-				<label> Projects </label><br>
-
-			</div>
-			<table id="projectsTable" border="1">
-			</table>
-			<div class="row" >
-				<div class="col-lg-4" style="text-align: right">
-		<!-- 		            		<p style = "font-size:24px; margin-bottom:0px;">Result</p>
-				            		<p style = "margin-left:20px; font-size:18px">Click to select</p> -->
-				</div>
-				<div class="col-lg-8" style="">
-		 			<table id="resultsTable" style="border: 0px solid black; font-size:18px; width:400px">
-					</table>
-
-					<br><br>
-				</div>
+			<div class="same">
+				<table id="projectsTable" border="1">
+				</table>
 			</div>
 		</div>
 	</div>
 
 	<br><br>
-
-	<style type="text/css">
-  .tableag > th, td {
-    padding:15px;
-  }
-	table{
-		border-collapse: collapse;
-		width:100%;
-		table-layout: fixed;
-	}
-
-	table td {
-		width: 20%;
-	}
-	button#details{
-		width:100%;
-	}
-
-	.tableButton{
-		width:100%;
-	}
-  </style>
 
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>
@@ -343,7 +305,6 @@
 
 
 var keys = [];
-var searchType = document.getElementById("searchType").value
 
 var query = firebase.database().ref("projects").orderByKey();
 query.once("value")
@@ -390,7 +351,6 @@ query.once("value")
 
         function searchProjects(){
         	var keys = [];
-        	var searchType = document.getElementById("searchType").value
         	var table = document.getElementById('projectsTable');
 
         	while(table.rows.length > 0) {
@@ -410,7 +370,7 @@ query.once("value")
         			for (var x=0; x < snapshot.numChildren(); x++){
         				console.log(snapshot.val()[keys[x]]);
 
-        				if(snapshot.val()[keys[x]][searchType] == document.getElementById("searchProject").value)  {
+        				if(snapshot.val()[keys[x]]["name"] == document.getElementById("searchProject").value)  {
 
         					var table = document.getElementById("projectsTable");
 

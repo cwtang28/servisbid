@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var engines = require('consolidate');
 var nodemailer = require('nodemailer');
 
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 app.set('view engine', 'html');
 app.set('views', __dirname+'/views');
@@ -34,11 +34,11 @@ app.get('/profile', function(req, res){
 })
 
 app.get('/projectDetails', function(req,res){
-	res.render('profile.html')
+	res.render('projectDetails.html')
 })
 
 app.get('/yourProjectDetails', function(req,res){
-	res.render('/profile.html')
+	res.render('/yourProjectDetails.html')
 })
 
 app.get('/myprojects', function (req, res) {
@@ -72,12 +72,12 @@ app.post('/projectDetails', function(req, res){
     var id = req.param('creator');
     var date = req.param('deadline');
 
-    res.render('projectDetails.html', { 
-    	user:user, 
+    res.render('projectDetails.html', {
+    	user:user,
     	category:category,
     	location:location,
-    	service:service, 
-    	highestbid:highestbid, 
+    	service:service,
+    	highestbid:highestbid,
     	description:description,
     	key:key,
     	creator:id,
@@ -96,12 +96,12 @@ app.post('/yourProjectDetails', function(req,res){
     var id = req.param('creator');
     var date = req.param('date')
     console.log(date)
-    res.render('yourProjectDetails.html', { 
-    	user:user, 
+    res.render('yourProjectDetails.html', {
+    	user:user,
     	category:category,
     	location:location,
-    	service:service, 
-    	highestbid:highestbid, 
+    	service:service,
+    	highestbid:highestbid,
     	description:description,
     	key:key,
     	creator:id,
@@ -115,8 +115,8 @@ app.post('/doneWithProject', function(req,res){
     var makerEmail = req.param('makeEmail')
     var location = req.param('location');
     var service = req.param('service');
-    res.redirect('/profile')
+    res.redirect('/test')
 })
 
 app.listen(8000);
-console.log('running on 8000 hopefully');
+console.log('running on 8000');
