@@ -30,7 +30,7 @@ app.get('/createProject', function(req, res){
 })
 
 app.get('/profile', function(req, res){
-	res.render('profile.html');
+	res.render('test.html');
 })
 
 app.get('/projectDetails', function(req,res){
@@ -56,6 +56,12 @@ app.get('/accepted', function (req, res) {
 app.get('/completed', function (req, res) {
     res.render('completed.html');
 });
+
+app.get('/projects', function(req,res){
+		res.render('projects.html', {
+			query:""
+		})
+})
 
 app.get('/logout', function(req,res){
     res.render('index.html')
@@ -117,6 +123,14 @@ app.post('/doneWithProject', function(req,res){
     var service = req.param('service');
     res.redirect('/test')
 })
+
+app.post('/search', function(req,res){
+    var query = req.param('query');
+		res.render('projects.html', {
+			query:query
+		})
+})
+
 
 app.listen(8000);
 console.log('running on 8000');

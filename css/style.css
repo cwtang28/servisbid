@@ -152,6 +152,17 @@ a:focus {
     color: #cfcfcf;
 }
 
+#tf-table label{
+  padding:10px 0;
+  margin-top:80px;
+}
+#tf-table table{
+  width:100%;
+}
+#tf-table td{
+  height:30px;
+}
+
 #tf-dash {
     background-color:#ffffff;
     background-size: cover;

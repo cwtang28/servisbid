@@ -35,7 +35,7 @@
             <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642;">
               <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
       <!--         <hr> -->
-        
+
             </div>
 
             <div class="clearfix" style="background-color:#142642"><!-- </br> &nbsp; --></div>
@@ -118,22 +118,9 @@
     width:100%;
   }
   </style>
-                <table id="projectsTable" border="1">
+                <table id="yourTable" border="1">
                 </table>
-      <br><br>
-
-
-
-               <form class="search">
-              <input type="text" class="register-input" id="searchProject" placeholder="Search">
-              <select id="searchType">
-                <option value="name">Name</option>
-                <option value="category" selected>Category</option>
-                <option value="location">Location</option>
-              </select>
-              <p id="error"></p>
-              <button type="button" onclick="searchProjects()" value="search" class="register-button">Search</button>
-              <option></option>
+                <br><br>
             </form>
           </div>
         </div>
@@ -223,6 +210,7 @@
           firebase.database().ref('/users/' + userId + '/projects').once('value').then(function(snapshot) {
 
             for (var x=0; x < snapshot.numChildren(); x++){
+              console.log("got here")
               var table = document.getElementById("yourTable");
 
               var row = table.insertRow(0);
@@ -313,8 +301,8 @@
               cell3.innerHTML = snapshot.val()[tempKey]["location"]
               cell4.innerHTML = snapshot.val()[tempKey]["service"];
               cell5.innerHTML = snapshot.val()[tempKey]["description"]
-                  cell6.innerHTML = snapshot.val()[tempKey]["bid"]
-                  cell7.innerHTML = snapshot.val()[tempKey]["comments"]
+              cell6.innerHTML = snapshot.val()[tempKey]["bid"]
+              cell7.innerHTML = snapshot.val()[tempKey]["comments"]
 
               button.innerHTML = '<form action="/projectDetails" method="post"> <input type="text" style="display:none" name="name" class="register-input" value="'+ snapshot.val()[tempKey]["name"] + '"> <input type="text" style="display:none" name="category" class="register-input" value="'+ snapshot.val()[tempKey]["category"] + '"> <input type="text" style="display:none" name="location" class="register-input" value="'+ snapshot.val()[tempKey]["location"] + '"> <input type="text" style="display:none" name="service" class="register-input" value="'+ snapshot.val()[tempKey]["service"] + '"> <input type="text" style="display:none" name="highestbid" class="register-input" value="'+ snapshot.val()[tempKey]["highestbid"] + '"> <input type="text" style="display:none" name="description" class="register-input" value="'+ snapshot.val()[tempKey]["description"] + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"> <input type="text" style="display:none" name="key" class="register-input" value="' + tempKey + '"><input type="text" style="display:none" name="creator" class="register-input" value="' + snapshot.val()[tempKey]["creatorId"] + '"> <input type="text" style="display:none" name="deadline" class="register-input" value = "' + snapshot.val()[tempKey]["deadline"] + '"> <button id="details" value="upvote">Details</button></form>';
             }
@@ -376,7 +364,7 @@
             }
           });
         });
-      } 
+      }
       else {
         window.location = document.getElementById("notLoggedIn").href
       }
@@ -384,8 +372,6 @@
 
 
 
-var keys = [];
-var searchType = document.getElementById("searchType").value
 
 var query = firebase.database().ref("projects").orderByKey();
 query.once("value")
@@ -429,57 +415,6 @@ query.once("value")
             // var username = snapshot.val()["username"];
             // document.getElementById("username").innerHTML = username
         // });
-
-
-
-
-        function searchProjects(){
-          var keys = [];
-          var searchType = document.getElementById("searchType").value
-          var table = document.getElementById('projectsTable');
-
-          while(table.rows.length > 0) {
-            table.deleteRow(0);
-          }   
-
-
-          var query = firebase.database().ref("projects").orderByKey();
-          query.once("value")
-          .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-              var key = childSnapshot.key;
-              console.log(key)
-              keys.push(key);
-            });
-
-            firebase.database().ref('/projects').once('value').then(function(snapshot) {
-              for (var x=0; x < snapshot.numChildren(); x++){
-                console.log(snapshot.val()[keys[x]]);
-
-                if(snapshot.val()[keys[x]][searchType] == document.getElementById("searchProject").value)  {
-
-                  var table = document.getElementById("projectsTable");
-
-                  var row = table.insertRow(0);
-
-                  var cell1 = row.insertCell(0);
-                  var cell2 = row.insertCell(1);
-                  var cell3 = row.insertCell(2);
-                  var cell4 = row.insertCell(3);
-                  var cell5 = row.insertCell(4);
-                  var cell6 = row.insertCell(5);
-
-                  cell1.innerHTML = snapshot.val()[keys[x]]["name"]
-                  cell2.innerHTML = snapshot.val()[keys[x]]["category"]
-                  cell3.innerHTML = snapshot.val()[keys[x]]["location"]
-                  cell4.innerHTML = snapshot.val()[keys[x]]["service"];
-                  cell5.innerHTML = snapshot.val()[keys[x]]["description"]
-                  cell6.innerHTML = snapshot.val()[keys[x]]["deadline"]
-                }
-              }
-            });
-          });
-        }
 
         function markDone(values, key, workerId, creatorId){
           console.log(values)
