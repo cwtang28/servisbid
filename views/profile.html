@@ -39,11 +39,11 @@
           <div class="left_col scroll-view">
 
 
- 
+
             <div class="navbar nav_title" style="border: 0; /*padding-top:20px*/;background-color:#142642;">
-              <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">YODEL</span><!-- </i> <span>Gentelella Alela!</span> --></a>
+              <a href="/" ><!-- <i class="fa fa-paw"> --><!-- <img src="img/yodelicon.png" style="width:20%"> --><span style = "padding-left:20px; font-size: 36px;font-family: 'Raleway', sans-serif;color:white !important">BIDIT</span><!-- </i> <span>Gentelella Alela!</span> --></a>
       <!--         <hr> -->
-        
+
             </div>
 
             <div class="clearfix" style="background-color:#142642"><!-- </br> &nbsp; --></div>
@@ -108,13 +108,13 @@
  -->
 
 
-<!-- 
+<!--
  							<label id="username" style = "text-align: center !important"></label></br>
 							<label> My Projects</label><br>
 							<table id="yourTable" border="1"></table>
 							<br><br> -->
 
-						
+
 							<button><a href="/createProject"> New Project</a></button>
 							<br><br>
 
@@ -408,7 +408,7 @@
 						}
 					});
 				});
-			} 
+			}
 			else {
 				window.location = document.getElementById("notLoggedIn").href
 			}
@@ -469,7 +469,7 @@ query.once("value")
 
         	while(table.rows.length > 0) {
         		table.deleteRow(0);
-        	}   
+        	}
 
         	var query = firebase.database().ref("projects").orderByKey();
         	query.once("value")
